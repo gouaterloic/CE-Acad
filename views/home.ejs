@@ -1,0 +1,51 @@
+<div class="container <%= typeof str != 'undefined' ? 'right-panel-active' : ''%>" id="container">
+	<div class="form-container sign-up-container <%= typeof str != 'undefined' ? 'send-front' : ''%>" id="sign-up-container">
+		<form action="/signup" method="POST">
+			<h1>Create Account</h1>
+			<div class="social-container">
+				<img src="/img/logo-transparent.png" alt="CE-Acad logo"
+				width="200">
+			</div>
+			<% include ./partials/signUpMsg%>
+			<span>Enter your registration information</span>
+			<input type="text" placeholder="Username" name="username" value="<%= typeof username != 'undefined' ? username : ''%>" />
+			<input type="email" placeholder="Email" name="email" value="<%= typeof email != 'undefined' ? email : ''%>"/>
+			<input type="password" placeholder="Password" name="password" value="<%= typeof password != 'undefined' ? password : ''%>"/>
+			<input type="password" placeholder="Confirm Password" name="password2" value="<%= typeof password2 != 'undefined' ? password2 : ''%>"/>
+			<a id="signInInfo" href="#" class="mobile-only">Already have an Account?</a>
+			<button>Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container" id="sign-in-container">
+		<form action="/signin" method="POST">
+			<h1>Sign In</h1>
+			<div class="social-container">
+				<img src="/img/logo-transparent.png" alt="CE-Acad logo"
+				width="200">
+			</div>
+			<% include ./partials/signInMsg%>
+			<span>Enter account details</span>
+			<input type="email" placeholder="Email" name="email" />
+			<input type="password" placeholder="Password" name="password"/>
+			<div class="special">
+				<span class="mobile-only"><a id="signUpInfo" href="#">Create an Account</a> |</span>
+				<a href="#">Forgot your password?</a>
+			</div>
+			<button>Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p><strong>Already have an account?</strong> Please login with your personal details</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p><strong>No Account yet?</strong> Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>

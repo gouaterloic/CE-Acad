@@ -3,3 +3,8 @@
     <div class="error-display"> <em><%= error.msg %></em></div>
     <% }); %>
 <% } %>
+<% if(typeof successes != 'undefined'){ %>
+    <% successes.forEach(function(success){ %>
+    <div class="success-display"> <em><%= success.msg %></em></div>
+    <% }); %>
+<% } %>

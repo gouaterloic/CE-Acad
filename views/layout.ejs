@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link 
@@ -8,10 +14,28 @@
     href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
     crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    
     <title>CE-Acad</title>
 </head>
 <body>
+     <!-- JQuerry -->
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+     <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+            // 1) setup listener for custom event to re-initialize on change
+            $('select').on('contentChanged', function() {
+                $(this).formSelect();
+            }); 
+        });
+    </script>
+     
     <%- body %>
-    <script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 </body>

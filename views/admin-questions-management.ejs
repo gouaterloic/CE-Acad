@@ -1,0 +1,137 @@
+<style>
+    #search-request{
+        border-top: 2px solid black;
+    }
+
+    #search-results{
+        border-top: 2px solid greenyellow;
+        border-bottom: 2px solid black;
+    }
+
+    #question-answers{
+        border-right: 2px solid black;
+        border-top: 2px solid black;
+    }
+    .error-display{
+    letter-spacing: 0.5px;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 10px;
+    }
+
+    .success-display{
+        letter-spacing: 0.5px;
+        font-weight: bold;
+        color: green;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container row">
+    <h1 class="col s12 center">QUESTION MANAGEMENT</h1>
+    <span class="col s12 center">
+        <h3><% include ./partials/signUpMsg%></h3>
+    </span>
+    <form action="/admin/question-manager" method="POST" >
+        <div class="col s12">
+            <div class="input-field col s4">
+                <select name="subject" id="subjects">
+                    <option value="English">English Language</option>
+                    <!-- <option value="Mathematics">Mathematics</option> -->
+                </select>
+                <label>Choose Subject</label>
+            </div>
+            <div class="input-field col s4">
+                <%if(typeof topic == 'undefined' || topic == "Grammar"){%>
+                    <select name="topic" id="topics">
+                        <option value="Grammar" id="Grammar">Grammar</option>
+                        <option value="Vocabulary" id="Vocabulary">Vocabulary</option>
+                        <option value="Synonyms" id="Synonyms">Synonyms</option>
+                    </select>
+                <%}else if(topic == "Vocabulary"){%>
+                    <select name="topic" id="topics">
+                        <option value="Grammar" id="Grammar">Grammar</option>
+                        <option value="Vocabulary" id="Vocabulary" selected>Vocabulary</option>
+                        <option value="Synonyms" id="Synonyms">Synonyms</option>
+                    </select>
+                <%}else if(topic == "Synonyms"){%>
+                    <select name="topic" id="topics">
+                        <option value="Grammar" id="Grammar">Grammar</option>
+                        <option value="Vocabulary" id="Vocabulary">Vocabulary</option>
+                        <option value="Synonyms" id="Synonyms" selected>Synonyms</option>
+                    </select>
+                <%}%>
+                <label>Choose Topic</label>
+            </div>
+            <div class="input-field col s4">
+                <%if(typeof level == 'undefined' || level == "Elementary"){%>
+                    <select name="level" id="levels">
+                        <option value="Elementary" id="Elementary">Elementary</option>
+                        <option value="Pre-Intermediate" id="Pre-Intermediate">Pre-Intermediate</option>
+                        <option value="Intermediate" id="Intermediate">Intermediate</option>
+                        <option value="Advanced" id="Advanced">Advanced</option>
+                    </select>
+                <%}else if(level == "Pre-Intermediate"){%>
+                    <select name="level" id="levels">
+                        <option value="Elementary" id="Elementary">Elementary</option>
+                        <option value="Pre-Intermediate" id="Pre-Intermediate" selected>Pre-Intermediate</option>
+                        <option value="Intermediate" id="Intermediate">Intermediate</option>
+                        <option value="Advanced" id="Advanced">Advanced</option>
+                    </select>
+                <%}else if(level == "Intermediate"){%>
+                    <select name="level" id="levels">
+                        <option value="Elementary" id="Elementary">Elementary</option>
+                        <option value="Pre-Intermediate" id="Pre-Intermediate">Pre-Intermediate</option>
+                        <option value="Intermediate" id="Intermediate" selected>Intermediate</option>
+                        <option value="Advanced" id="Advanced">Advanced</option>
+                    </select>
+                <%}else if(level == "Advanced"){%>
+                    <select name="level" id="levels">
+                        <option value="Elementary" id="Elementary">Elementary</option>
+                        <option value="Pre-Intermediate" id="Pre-Intermediate">Pre-Intermediate</option>
+                        <option value="Intermediate" id="Intermediate">Intermediate</option>
+                        <option value="Advanced" id="Advanced" selected>Advanced</option>
+                    </select>
+                <%}%>
+                <label>Choose Level</label>
+            </div>
+        </div>
+        <div class="col s6" id="question-answers">
+            <span class="col s12"><input type="text" placeholder="Question" name="label" id="question-label" class="col s12" value="<%= typeof label != 'undefined' ? label : ''%>"></span>
+
+            <span class="col s12"><p class="col s2 left"><label><input type="radio" value="0" name="correctAnswer"><span>A</span></label></p>
+            <input type="text" placeholder="Answer 1" name="answer1" class="col s10" value="<%= typeof answer1 != 'undefined' ? answer1 : ''%>"></span>
+            <span class="col s12"><p class="col s2"><label><input type="radio" value="1" name="correctAnswer"><span>B</span></label></p>
+            <input type="text" placeholder="Answer 2" name="answer2" class="col s10" value="<%= typeof answer2 != 'undefined' ? answer2 : ''%>"></span>
+            <span class="col s12"><p class="col s2"><label><input type="radio" value="2" name="correctAnswer"><span>C</span></label></p>
+            <input type="text" placeholder="Answer 3" name="answer3" class="col s10" value="<%= typeof answer3 != 'undefined' ? answer3 : ''%>"></span>
+            <span class="col s12"><p class="col s2"><label><input type="radio" value="3" name="correctAnswer"><span>D</span></label></p>
+            <input type="text" placeholder="Answer 4" name="answer4" class="col s10" value="<%= typeof answer4 != 'undefined' ? answer4 : ''%>"></span>
+            <span class="col s5"></span>
+            <input type="submit" value="ADD" class="btn col s2 waves-effect">
+        </div>
+    </form>
+
+    <div class="col s6">
+        <form action="" id="search-request">
+            <div class="input-field col s12">
+                <select name="searchBy">
+                    <option value="label">Question Label</option>
+                    <option value="subject">Subjects</option>
+                    <option value="topic">Topics</option>
+                    <option value="answer">Levels</option>
+                </select>
+                <label>Search By</label>
+            </div>
+            <input type="text" placeholder="Search Term" name="searchTerm" class="col s6">
+            <span class="col s2"></span>
+            <input type="submit" value="SEARCH" id="search-button" class="btn col s4 waves-effect">
+        </form>
+        <div class="col s12" id="search-results">
+            <h1>Search Results Here</h1>
+        </div>
+    </div>
+</div>
+
+<script src="/js/mainAdminQuestionsManagement.js"></script>
+        

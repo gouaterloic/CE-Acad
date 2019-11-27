@@ -14,7 +14,7 @@ require('./config/passport')(passport);
 
 //DB Config
 //const db = require('./config/keys').MongoURI;
-const db = require('./config/keys').MongoURI;
+const db = require('./config/keys').mongoUrl;
 
 // Connect to Mongo
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -59,6 +59,7 @@ app.use('/signin',require('./routes/sign-in'));
 app.use('/signup',require('./routes/sign-up'));
 app.use('/signout',require('./routes/sign-out'));
 app.use('/dashboard',require('./routes/dashboard'));
+app.use('/admin',require('./routes/admin'));
 
 // Launch server on PORT allocated
 app.listen(process.env.PORT || 5000, console.log(`Server started on port ${process.env.PORT || 5000}`));

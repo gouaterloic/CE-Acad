@@ -1,55 +1,94 @@
-<link rel="stylesheet" href="/css/styleHome.css" type="text/css">
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
 
-<div class="container <%= typeof str != 'undefined' ? 'right-panel-active' : ''%>" id="container">
-	<div class="form-container sign-up-container <%= typeof str != 'undefined' ? 'send-front' : ''%>" id="sign-up-container">
-		<form action="/signup" method="POST" autocomplete="off">
-			<h1>Create Account</h1>
-			<div class="social-container">
-				<img src="/img/logo-transparent.png" alt="CE-Acad logo"
-				width="200">
-			</div>
-			<% include ./partials/signUpMsg%>
-			<span>Enter your registration information</span>
-			<input type="text" placeholder="Username" name="username" value="<%= typeof username != 'undefined' ? username : ''%>" />
-			<input type="email" placeholder="Email" name="email" value="<%= typeof email != 'undefined' ? email : ''%>"/>
-			<input type="password" placeholder="Password" name="password" value="<%= typeof password != 'undefined' ? password : ''%>"/>
-			<input type="password" placeholder="Confirm Password" name="password2" value="<%= typeof password2 != 'undefined' ? password2 : ''%>"/>
-			<a id="signInInfo" href="#" class="mobile-only">Already have an Account?</a>
-			<button>Sign Up</button>
-		</form>
-	</div>
-	<div class="form-container sign-in-container" id="sign-in-container">
-		<form action="/signin" method="POST" autocomplete="off">
-			<h1>Sign In</h1>
-			<div class="social-container">
-				<img src="/img/logo-transparent.png" alt="CE-Acad logo"
-				width="200">
-			</div>
-			<% include ./partials/signInMsg%>
-			<span>Enter account details</span>
-			<input type="email" placeholder="Email" name="email" />
-			<input type="password" placeholder="Password" name="password"/>
-			<div class="special">
-				<span class="mobile-only"><a id="signUpInfo" href="#">Create an Account</a> |</span>
-				<a href="#">Forgot your password?</a>
-			</div>
-			<button>Sign In</button>
-		</form>
-	</div>
-	<div class="overlay-container">
-		<div class="overlay">
-			<div class="overlay-panel overlay-left">
-				<h1>Welcome Back!</h1>
-				<p><strong>Already have an account?</strong> Please login with your personal details</p>
-				<button class="ghost" id="signIn">Sign In</button>
-			</div>
-			<div class="overlay-panel overlay-right">
-				<h1>Hello, Friend!</h1>
-				<p><strong>No Account yet?</strong> Enter your personal details and start journey with us</p>
-				<button class="ghost" id="signUp">Sign Up</button>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link 
+    rel="stylesheet" 
+    href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styleHome.css" type="text/css">
+    <title>CE-Acad</title>
+</head>
+<body>
+     <!-- JQuerry -->
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+     <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+            // 1) setup listener for custom event to re-initialize on change
+            $('select').on('contentChanged', function() {
+                $(this).formSelect();
+            }); 
+        });
+    </script>
+     
+	 <div class="container <%= typeof str != 'undefined' ? 'right-panel-active' : ''%>" id="container">
+		<div class="form-container sign-up-container <%= typeof str != 'undefined' ? 'send-front' : ''%>" id="sign-up-container">
+			<form action="/signup" method="POST" autocomplete="off">
+				<h1>Create Account</h1>
+				<div class="social-container">
+					<img src="/img/logo-transparent.png" alt="CE-Acad logo"
+					width="200">
+				</div>
+				<% include ./partials/signUpMsg%>
+				<span>Enter your registration information</span>
+				<input type="text" placeholder="Username" name="username" value="<%= typeof username != 'undefined' ? username : ''%>" />
+				<input type="email" placeholder="Email" name="email" value="<%= typeof email != 'undefined' ? email : ''%>"/>
+				<input type="password" placeholder="Password" name="password" value="<%= typeof password != 'undefined' ? password : ''%>"/>
+				<input type="password" placeholder="Confirm Password" name="password2" value="<%= typeof password2 != 'undefined' ? password2 : ''%>"/>
+				<input type="email" placeholder="Referrer's Email (Not Compulsory)" name="affiliate"/>
+				<a id="signInInfo" href="#" class="mobile-only">Already have an Account?</a>
+				<button>Sign Up</button>
+			</form>
+		</div>
+		<div class="form-container sign-in-container" id="sign-in-container">
+			<form action="/signin" method="POST" autocomplete="off">
+				<h1>Sign In</h1>
+				<div class="social-container">
+					<img src="/img/logo-transparent.png" alt="CE-Acad logo"
+					width="200">
+				</div>
+				<% include ./partials/signInMsg%>
+				<span>Enter account details</span>
+				<input type="email" placeholder="Email" name="email" value="gouaterloic2@gmail.com"/>
+				<input type="password" placeholder="Password" name="password" value="loicdim"/>
+				<div class="special">
+					<span class="mobile-only"><a id="signUpInfo" href="#">Create an Account</a> |</span>
+					<a href="#">Forgot your password?</a>
+				</div>
+				<button>Sign In</button>
+			</form>
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>Welcome Back!</h1>
+					<p><strong>Already have an account?</strong> Please login with your personal details</p>
+					<button class="ghost" id="signIn">Sign In</button>
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>Hello, Friend!</h1>
+					<p><strong>No Account yet?</strong> Enter your personal details and start journey with us</p>
+					<button class="ghost" id="signUp">Sign Up</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+	
+	<script type="text/javascript" src="/js/mainHome.js"></script>
 
-<script type="text/javascript" src="/js/mainHome.js"></script>
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>

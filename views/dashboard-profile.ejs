@@ -1,0 +1,100 @@
+<% include ./templates/head%>
+    <title>CE-Acad | Profile</title>
+</head>
+
+<body>
+    <% include ./templates/header%>
+    <div class="main-title"> 
+        <h1>Profile</h1>
+    </div>
+    <hr>
+    <h1 style="text-align: center;">View and Edit your Account details</h1>
+    <hr>
+    <!-- Account Details -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Account Details</h1>
+            <p>These are your current account details.</p>
+            <p>Your email is particularly important. You'll use it both to log in and as affiliate identity.</p>
+            <p>Your username is used as your identity for all that concerns the quiz.</p>
+        </div>
+        <div class="grid-item-right">
+            <p><span class="labels">Email:</span> <%=user.email%></p>
+            <p><span class="labels">Username:</span> <%=user.username%></p>
+        </div>
+    </div>
+    <hr>
+    <!-- Edit Email -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Edit Email</h1>
+            <p>Want to use a different email? Set it right here.</p>
+            <% include ./partials/signUpMsg%>
+            <% include ./partials/signInMsg%>
+        </div>
+        <div class="grid-item-right">
+            <form action="/dashboard/profile/edit-email" method="POST">
+                <input type="text" name="email" placeholder=<%=user.email%>>
+                <p class="labels">Enter new email</p>
+                <input type="password" name="password">
+                <p class="labels">Enter your password</p><br>
+                <input type="submit" value="Update Email" class="btn">
+            </form>
+        </div>
+    </div>
+    <hr>
+    <!-- Edit Username -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Edit Username</h1>
+            <p>Want to use a different username? Set it right here.</p>
+        </div>
+        <div class="grid-item-right">
+            <form action="/dashboard/profile/edit-username" method="POST">
+                <input type="text" name="username" placeholder=<%=user.username%>>
+                <p class="labels">Enter new username</p>
+                <input type="password" name="password">
+                <p class="labels">Enter your password</p><br>
+                <input type="submit" value="Update Username" class="btn">
+            </form>
+        </div>
+    </div>
+    <hr>
+    <!-- Edit Password -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Edit Password</h1>
+            <p>Want to use a different password? Set it right here.</p>
+        </div>
+        <div class="grid-item-right">
+            <form action="/dashboard/profile/edit-password" method="POST">
+                <input type="password" name="password">
+                <p class="labels">Enter current password</p>
+                <input type="password" name="password1">
+                <p class="labels">Enter new password</p>
+                <input type="password" name="password2">
+                <p class="labels">Confirm new password</p><br>
+                <input type="submit" value="Update Password" class="btn">
+            </form>
+        </div>
+    </div>
+    <hr>
+    <!-- Delete Account -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Delete Account</h1>
+            <p>If you wish to completely delete your account, here is the place to do it.</p>
+            <p>This is an irreversible action which will completely wipe all your transactions and data from our database</p>
+        </div>
+        <div class="grid-item-right">
+            <form action="">
+                <input type="text">
+                <p class="labels">Enter the word DELETE</p>
+                <input type="password">
+                <p class="labels">Enter your password</p><br>
+                <input type="submit" value="Delete Account" class="btn" style="background-color: red;">
+            </form>
+        </div>
+    </div>
+    <% include ./templates/footer%>
+</body>

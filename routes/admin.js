@@ -4,7 +4,55 @@ const Question = require('../models/Questions');
 //const { forwardAuthenticated } = require('../config/auth');
 
 // Question Manager
-router.get('/question-manager',(req,res) => res.render('admin-questions-management'));
+router.get('/question-manager',(req,res) => {
+    // Search Questions
+    if (typeof req.query["searchBy"] != 'undefined'){
+        const searchBy = req.query["searchBy"];
+        const searchTerm = req.query["searchTerm"];
+        if(!searchTerm){
+            let errors = [{msg:'Enter Search Term'}];
+            res.render('admin-questions-management',{errors});
+        }else{
+            switch (searchBy){
+                case 'label': 
+                    Question.find({"label" : {$regex : `.*${searchTerm}.*`, '$options' : 'i'}})
+                    .exec()
+                    .then(doc=>{
+                        res.render('admin-questions-management',{doc});
+                    })
+                    .catch(err=>console.log())
+                    break;
+                case 'subject':
+                    Question.find({subject:searchTerm})
+                    .exec()
+                    .then(doc=>{
+                        res.render('admin-questions-management',{doc});
+                    })
+                    .catch(err=>console.log())
+                    break;
+                case 'topic':
+                    Question.find({topic:searchTerm})
+                    .exec()
+                    .then(doc=>{
+                        res.render('admin-questions-management',{doc});
+                    })
+                    .catch(err=>console.log())
+                    break;
+                case 'level':
+                    Question.find({level:searchTerm})
+                    .exec()
+                    .then(doc=>{
+                        res.render('admin-questions-management',{doc});
+                    })
+                    .catch(err=>console.log())
+                    break;
+            }
+        }
+    }else{
+        res.render('admin-questions-management')
+    };
+});
+
 
 router.post('/question-manager',(req,res) => {
     // Collection of Data

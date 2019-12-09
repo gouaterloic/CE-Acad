@@ -1,0 +1,28 @@
+const newQuiz = new Quiz({
+        title: "English Language Quiz Contest",
+        rules: "In a set of 50 questions, answer as many as possible within 5 minutes. The competition is done between every 4 participants (after every 4 participants, a winner is declared and awarded, and a new quiz challenge session begins) and is always open. Each time you win a session, you receive 7,000 FCFA immediately into your CE-ACAD revenue.",
+        subject: "English",
+        registration_fee: 2000,
+        winning_price: 7000
+    });
+
+    const newQuiz2 = new Quiz({
+        title: "English Grammar Quiz Contest",
+        rules: "In a set of 50 questions, answer as many as possible within 5 minutes. The competition is done between every 4 participants (after every 4 participants, a winner is declared and awarded, and a new quiz challenge session begins) and is always open. Each time you win a session, you receive 3,200 FCFA immediately into your CE-ACAD revenue.",
+        subject: "English",
+        topic: "Grammar",
+        registration_fee: 1000,
+        winning_price: 3200
+    });
+
+    const newQuiz3 = new Quiz({
+        title: "English Vocabulary Quiz Contest",
+        rules: "In a set of 50 questions, answer as many as possible within 5 minutes. The competition is done between every 4 participants (after every 4 participants, a winner is declared and awarded, and a new quiz challenge session begins) and is always open. Each time you win a session, you receive 3,200 FCFA immediately into your CE-ACAD revenue.",
+        subject: "English",
+        topic: "Vocabulary",
+        registration_fee: 1000,
+        winning_price: 3200
+    });
+    newQuiz.save();
+    newQuiz2.save();
+    newQuiz3.save();

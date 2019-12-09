@@ -20,6 +20,14 @@ const UserSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    affiliate: {
+        type: String,
+        default: "admin@ce-acad.com"
+    },
+    role: {
+        type: String,
+        default: "member"
     }
 });
 

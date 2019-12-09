@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
@@ -21,8 +20,9 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => console.log('MongoDB Connected.......'))
 .catch(err => console.log(err))
 
-// Use ejs layouts
-app.use(expressLayouts);
+// // Use ejs layouts
+// app.use(expressLayouts);
+
 // Use ejs as view engine
 app.set('view engine', 'ejs');
 
@@ -60,6 +60,7 @@ app.use('/signup',require('./routes/sign-up'));
 app.use('/signout',require('./routes/sign-out'));
 app.use('/dashboard',require('./routes/dashboard'));
 app.use('/admin',require('./routes/admin'));
+
 
 // Launch server on PORT allocated
 app.listen(process.env.PORT || 5000, console.log(`Server started on port ${process.env.PORT || 5000}`));

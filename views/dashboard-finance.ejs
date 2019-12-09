@@ -1,0 +1,124 @@
+<% include ./templates/head%>
+    <title>CE-Acad | Finance</title>
+</head>
+
+<body>
+    <% include ./templates/header%>
+    <div class="main-title"> 
+        <h1>Finance</h1>
+    </div>
+    <hr>
+    <h1 style="text-align: center;">View and Manage your Finances</h1>
+    <hr>
+    <!-- Current Revenue -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Current Revenue</h1>
+            <p>This is the amount currently available in your CE-Acad Account.</p>
+        </div>
+        <div class="grid-item-right">
+            <p><span class="labels">Revenue:</span> <%=user.revenue%> FCFA</p>
+        </div>
+    </div>
+    <hr>
+    <!-- Deposit Money -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Deposit Money</h1>
+            <p>You need to add money into your CE-Acad Account in order to be able to register for quiz challenges.</p>
+            <p>Make sure you are closed to your phone ready to confirm and complete the payment.</p>
+        </div>
+        <div class="grid-item-right">
+            <form action="">
+                <input type="number" name="amount">
+                <p class="labels">Enter Amount (FCFA)</p>
+                <select name="provider_id">
+                    <option value="mtn_cm">Cameroon MTN Mobile Money</option>
+                    <option value="mtn_ug">Uganda MTN Mobile Money</option>
+                    <option value="airtel_ug">Uganda Airtel Money</option>
+                    <option value="mpesa_ke">Kenya MPesa</option>
+                    <option value="mtn_rw">Rwanda MTN Mobile Money</option>
+                    <option value="mtn_gh">Ghana MTN Mobile Money</option>
+                    <option value="tigo_gh">Ghana Tigo Mobile Money</option>
+                    <option value="vodafone_gh">Ghana Vodafone Mobile Money</option>
+                </select>
+                <p class="labels">Choose Payment Option</p>
+                <input type="number" name="account_number" placeholder="Example: 237676653984">
+                <p class="labels">Enter Mobile Money Number</p><br>
+                <input type="submit" value="Deposit" class="btn">
+            </form>
+        </div>
+    </div>
+    <hr>
+    <!-- Withdraw Money -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Withdraw Money</h1>
+            <p>Transfer money from your CE-Acad Account to your Mobile Money Account now.</p>
+            <p>The company processing our payments charges a transfer fee to be deducted from your Account during this process. 
+                Make sure you have enough money in your CE-Acad Account to cater for that.
+            </p>
+        </div>
+        <div class="grid-item-right">
+            <form action="">
+                <input type="number" name="amount">
+                <p class="labels">Enter Amount (FCFA)</p>
+                <select name="provider_id">
+                    <option value="mtn_cm">Cameroon MTN Mobile Money</option>
+                    <option value="mtn_ug">Uganda MTN Mobile Money</option>
+                    <option value="airtel_ug">Uganda Airtel Money</option>
+                    <option value="mpesa_ke">Kenya MPesa</option>
+                    <option value="mtn_rw">Rwanda MTN Mobile Money</option>
+                    <option value="mtn_gh">Ghana MTN Mobile Money</option>
+                    <option value="tigo_gh">Ghana Tigo Mobile Money</option>
+                    <option value="vodafone_gh">Ghana Vodafone Mobile Money</option>
+                </select>
+                <p class="labels">Choose Payment Option</p>
+                <input type="number" name="account_number" placeholder="Example: 237676653984">
+                <p class="labels">Enter Mobile Money Number</p>
+                <input type="password">
+                <p class="labels">Enter your password</p><br>
+                <input type="submit" value="Withdraw" class="btn">
+            </form>
+        </div>
+    </div>
+    <hr>
+    <!-- Financial Transactions -->
+    <div class="grid-container">
+        <div class="grid-item-left">
+            <h1>Financial Transactions</h1>
+            <p>These are the dtails of all your financial transactions so far.</p>
+        </div>
+        <div class="grid-item-right">
+            <table class="striped highlight">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Number</th>
+                        <th>Old Revenue</th>
+                        <th>Amount</th>
+                        <th>Fee</th>
+                        <th>New Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="financeTransactions">
+                        <%if(typeof transactions != 'undefined'){%>
+                            <% transactions.forEach(trans => { %>
+                                <tr>
+                                    <td><%=trans.date%></td>
+                                    <td><%=trans.type %></td>
+                                    <td><%=trans.momo_number %></td>
+                                    <td><%=trans.old_revenue %></td>
+                                    <td><%=trans.amount %></td>
+                                    <td><%=trans.fee %></td>
+                                    <td><%=trans.new_revenue %></td>
+                                </tr>
+                            <% }); %>
+                        <% }; %>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    <% include ./templates/footer%>
+</body>

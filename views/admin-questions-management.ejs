@@ -113,13 +113,13 @@
     </form>
 
     <div class="col s6">
-        <form action="" id="search-request">
+        <form aaction="/admin/question-manager" method="GET" id="search-request">
             <div class="input-field col s12">
                 <select name="searchBy">
                     <option value="label">Question Label</option>
                     <option value="subject">Subjects</option>
                     <option value="topic">Topics</option>
-                    <option value="answer">Levels</option>
+                    <option value="level">Levels</option>
                 </select>
                 <label>Search By</label>
             </div>
@@ -128,7 +128,7 @@
             <input type="submit" value="SEARCH" id="search-button" class="btn col s4 waves-effect">
         </form>
         <div class="col s12" id="search-results">
-            <h1>Search Results Here</h1>
+            <% include ./partials/question-search-results%>
         </div>
     </div>
 </div>

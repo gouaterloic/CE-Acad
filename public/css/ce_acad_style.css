@@ -1,0 +1,160 @@
+* {
+    font-family: 'Muli', sans-serif;
+    font-size: 15px;
+    margin: 0px;
+    text-decoration: none;
+}
+
+.main-title {
+    height: 3rem;
+    background-color: #c5cae9;
+    text-align: center;
+    padding: auto;
+    border-bottom: 3px solid #1a237e;
+}
+
+.main-title h1 {
+    width: 80vw;
+    margin: 0 auto;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+footer{
+    border-top: 3px solid #1a237e;
+    height: 10vh;
+}
+
+header{
+    height: 2rem;
+    position: fixed;
+}
+
+.menu-container{
+    position: fixed;
+    margin-left: 70vw;
+    margin-top: 2rem;
+}
+
+header nav{
+    padding:0;
+    background-color: #e8eaf6;
+}
+
+.expandable{
+    visibility: collapse;
+
+}
+
+header nav a{
+    display: block;
+    margin: 0.4rem;
+    font-size: 1.5rem;
+    padding: 0.3rem;
+}
+
+header nav a:hover{
+    background-color: #283593;
+    color: #fff;
+}
+
+header nav a i{
+    font-size: 1.5rem;
+}
+
+.menu-icon{
+    color: #1a237e;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    margin-left: 70vw;
+    float: left;
+    clear: both;
+}
+
+.menu-icon:hover{
+    background-color: #1a237e;
+    color: #fff;
+}
+
+#menu{
+    display: none;
+}
+
+#menu:checked ~* .expandable{
+    visibility: visible;
+}
+
+#menu:checked ~* .menu-icon{
+    color: #000;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    margin-bottom: 0.5rem;
+}
+
+.grid-container{
+    width: 80vw;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    justify-content: space-evenly;
+}
+
+.grid-item-left h1{
+    color: #1a237e;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.grid-container p{
+    margin-bottom: 0.2rem;
+}
+
+.grid-item-left{
+    padding-right: 15rem;
+}
+
+.grid-item-right{
+    padding-left: 2.5rem;
+}
+
+.labels{
+    font-weight: bold;
+    color: #5c6bc0;
+}
+
+input,select{
+    border: 0 none;
+    border-bottom: 1px solid #1a237e;
+    width: 20rem;
+}
+
+.btn{
+    border-radius: 0.5rem;
+    color: azure;
+    cursor:pointer;
+    background:#3f51b5;
+    border: 0 none;
+}
+
+
+
+@media screen and (max-width: 1000px){
+    .grid-container{
+        width: 80vw;
+        margin: 2rem auto;
+        display: grid;
+        grid-template-columns: 100%;
+        justify-content: space-evenly;
+    }
+    .grid-item-left,.grid-item-right{
+        padding: 0;
+    }
+    .grid-item-right{
+        margin-top: 0.6rem;
+    }
+}

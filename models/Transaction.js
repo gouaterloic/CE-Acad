@@ -13,7 +13,7 @@ const TransactionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    country: {
+    currency: {
         type: String,
         required: true
     },
@@ -22,7 +22,7 @@ const TransactionSchema = new mongoose.Schema({
         required: true
     },
     momo_number: {
-        type: Number,
+        type: String,
         required: true
     },
     old_revenue: {//Revenue before transaction
@@ -36,6 +36,22 @@ const TransactionSchema = new mongoose.Schema({
     id_user: {// ID of user concerned
         type: String,
         required: true
+    },
+    from_to: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        default: "PENDING"
+    },
+    ref: {
+        type: String,
+        default: "none"
+    },
+    dusu_ref: {
+        type: String,
+        default: "none"
     },
     date: {
         type: Date,

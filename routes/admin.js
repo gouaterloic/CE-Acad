@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Question = require('../models/Questions');
+const Question = require('../models/Question');
 //const { forwardAuthenticated } = require('../config/auth');
 
 // Question Manager

@@ -5,19 +5,20 @@
 <body>
     <% include ./templates/header%>
     <div class="main-title"> 
-        <h1>Finance</h1>
+        <h1>Manage your Finances</h1>
     </div>
-    <hr>
+    <!-- <hr>
     <h1 style="text-align: center;">View and Manage your Finances</h1>
-    <hr>
+    <hr> -->
     <!-- Current Revenue -->
     <div class="grid-container">
         <div class="grid-item-left">
             <h1>Current Revenue</h1>
             <p>This is the amount currently available in your CE-Acad Account.</p>
         </div>
-        <div class="grid-item-right">
+        <div class="grid-item-right" id="transactions">
             <p><span class="labels">Revenue:</span> <%=user.revenue%> FCFA</p>
+            <button class="btn view-transactions">View Transactions</button>
         </div>
     </div>
     <hr>
@@ -27,9 +28,15 @@
             <h1>Deposit Money</h1>
             <p>You need to add money into your CE-Acad Account in order to be able to register for quiz challenges.</p>
             <p>Make sure you are closed to your phone ready to confirm and complete the payment.</p>
+            <%if (typeof edit !== "undefined"){%>
+                <%if (edit === "deposit"){%>
+                    <% include ./partials/signUpMsg%>
+                    <% include ./partials/signInMsg%>
+                <%}%>
+            <%}%>
         </div>
         <div class="grid-item-right">
-            <form action="">
+            <form action="/dashboard/finance/deposit" method="POST">
                 <input type="number" name="amount">
                 <p class="labels">Enter Amount (FCFA)</p>
                 <select name="provider_id">
@@ -58,9 +65,15 @@
             <p>The company processing our payments charges a transfer fee to be deducted from your Account during this process. 
                 Make sure you have enough money in your CE-Acad Account to cater for that.
             </p>
+            <%if (typeof edit !== "undefined"){%>
+                <%if (edit === "withdraw"){%>
+                    <% include ./partials/signUpMsg%>
+                    <% include ./partials/signInMsg%>
+                <%}%>
+            <%}%>
         </div>
         <div class="grid-item-right">
-            <form action="">
+            <form action="/dashboard/finance/withdraw" method="POST">
                 <input type="number" name="amount">
                 <p class="labels">Enter Amount (FCFA)</p>
                 <select name="provider_id">
@@ -76,49 +89,13 @@
                 <p class="labels">Choose Payment Option</p>
                 <input type="number" name="account_number" placeholder="Example: 237676653984">
                 <p class="labels">Enter Mobile Money Number</p>
-                <input type="password">
+                <input type="password" name="password">
                 <p class="labels">Enter your password</p><br>
                 <input type="submit" value="Withdraw" class="btn">
             </form>
         </div>
     </div>
     <hr>
-    <!-- Financial Transactions -->
-    <div class="grid-container">
-        <div class="grid-item-left">
-            <h1>Financial Transactions</h1>
-            <p>These are the dtails of all your financial transactions so far.</p>
-        </div>
-        <div class="grid-item-right">
-            <table class="striped highlight">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Number</th>
-                        <th>Old Revenue</th>
-                        <th>Amount</th>
-                        <th>Fee</th>
-                        <th>New Revenue</th>
-                    </tr>
-                </thead>
-                <tbody id="financeTransactions">
-                        <%if(typeof transactions != 'undefined'){%>
-                            <% transactions.forEach(trans => { %>
-                                <tr>
-                                    <td><%=trans.date%></td>
-                                    <td><%=trans.type %></td>
-                                    <td><%=trans.momo_number %></td>
-                                    <td><%=trans.old_revenue %></td>
-                                    <td><%=trans.amount %></td>
-                                    <td><%=trans.fee %></td>
-                                    <td><%=trans.new_revenue %></td>
-                                </tr>
-                            <% }); %>
-                        <% }; %>
-                    </tbody>
-            </table>
-        </div>
-    </div>
     <% include ./templates/footer%>
+    <script type="text/javascript" src="/js/mainFinance.js"></script>
 </body>

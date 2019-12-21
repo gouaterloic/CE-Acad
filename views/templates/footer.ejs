@@ -1,3 +1,12 @@
 <footer>
     <img src="/img/logo-transparent.png" alt="logo" height="50vh">
 </footer>
+<script>
+    const clickedMenu = document.getElementById(document.title.slice(10));
+    if (clickedMenu){
+        if (document.getElementsByClassName('clickedMenu')[0]){
+            document.getElementsByClassName('clickedMenu')[0].classList.remove('clickedMenu')
+        }
+        clickedMenu.classList.add('clickedMenu')
+    }
+</script>

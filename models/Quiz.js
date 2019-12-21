@@ -41,9 +41,13 @@ const QuizSchema = new mongoose.Schema({
         type:Array,
         default:[]
     },
-    round: {//Revenue after transaction
+    round: {
         type: Number,
-        default: 0
+        default: 1
+    },
+    results: {
+        type: Array,
+        default: []
     },
     date: {
         type: Date,

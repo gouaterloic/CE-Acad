@@ -28,6 +28,10 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "member"
+    },
+    revenue_to_redistribute: {
+        type: Number,
+        default:0
     }
 });
 

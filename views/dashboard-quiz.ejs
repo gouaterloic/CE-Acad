@@ -3,12 +3,20 @@
 </head>
 
 <body>
+    <div id="quiz-layer">
+        <div class="quiz-container">
+            <h1 id="count-down"></h1>
+            <hr class="count-down">
+            <h1><span id="title">Question: </span> <span id="question-number"></span> / <span id="number-of-questions"></span></h1>
+            <hr class="count-down">
+        </div>
+    </div>
     <% include ./templates/header%>
     <div class="main-title"> 
-        <h1>Quiz</h1>
+        <h1>Participate in Quiz Challenges</h1>
     </div>
-    <hr>
-    <h1 style="text-align: center;">View, Register for, and Participate in Quiz Challenges</h1>
+    <!-- <hr> -->
+    <!-- <h1 style="text-align: center;">View, Register for, and Participate in Quiz Challenges</h1> -->
     <!-- Quiz Details -->
     <%quiz.forEach((q,i)=>{%>
         <hr>
@@ -16,8 +24,14 @@
             <div class="grid-item-left">
                 <h1><%=q.title%></h1>
                 <p><%=q.rules%></p>
+                <%if (typeof edit !== "undefined"){%>
+                    <%if (edit === q.id){%>
+                        <% include ./partials/signUpMsg%>
+                        <% include ./partials/signInMsg%>
+                    <%}%>
+                <%}%>
             </div>
-            <div class="grid-item-right">
+            <div class="grid-item-right " id= <%=q.id%>>
                 <p><span class="labels">Session: </span> <%=q.round%></p>
                 <p><span class="labels">Current Number of Participants: </span> <%=q.current_participants%></p>
                 <p><span class="labels">Registration Fee: </span> <%=q.registration_fee%> FCFA</p>
@@ -25,25 +39,20 @@
                 <%if (q.played_users.includes(user.id)){%>
                     <p class="labels">Waiting for the next <%=4-q.current_participants%> participant(s)</p>
                 <%}else if (q.registered_users.includes(user.id)) {%>
-                    <form action="/dashboard/quiz/take-quiz-now" method="POST">
-                        <input type="hidden" name="id" value = <%=q.id%> >
-                        <input type="hidden" name="subject" value = <%=q.subject%> >
-                        <input type="hidden" name="topic" value = <%=q.topic%> >
-                        <input type="hidden" name="level" value = <%=q.level%> >
-                        <input type="submit" class="btn" value="TAKE QUIZ NOW">
-                    </form>
+                    <button class="btn play" data-id = <%=q.id%> data-subject = <%=q.subject%> data-topic = <%=q.topic%> data-level = <%=q.level%> >Take Quiz Now</button>
                 <%}else{%>
                     <form action="/dashboard/quiz/register" method="POST">
                         <input type="hidden" name="id" value = <%=q.id%> >
                         <input type="hidden" name="registration_fee" value = <%=q.registration_fee%> >
                         <input type="password" name="password">
                         <p class="labels">Enter password</p><br>
-                        <input type="submit" class="btn" value="REGISTER">
+                        <button type="submit" class="btn register">Register</button>
                     </form>
-                <%}%>    
+                <%}%> 
+                <button class="btn view-results" data-id = <%=q.id%> >View Results</button>   
             </div>
         </div>
     <%})%>
     <% include ./templates/footer%>
+    <script type="text/javascript" src="/js/mainQuiz.js"></script>
 </body>
-<!--<script type="text/javascript" src="/js/mainQuiz.js"></script>--> 

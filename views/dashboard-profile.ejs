@@ -5,11 +5,11 @@
 <body>
     <% include ./templates/header%>
     <div class="main-title"> 
-        <h1>Profile</h1>
+        <h1>Manage your Account Details</h1>
     </div>
-    <hr>
+    <!-- <hr>
     <h1 style="text-align: center;">View and Edit your Account details</h1>
-    <hr>
+    <hr> -->
     <!-- Account Details -->
     <div class="grid-container">
         <div class="grid-item-left">
@@ -21,6 +21,9 @@
         <div class="grid-item-right">
             <p><span class="labels">Email:</span> <%=user.email%></p>
             <p><span class="labels">Username:</span> <%=user.username%></p>
+            <%if(user.affiliate != "admin@ce-acad.com"){%>
+                <p><span class="labels">Referrer:</span> <%=ref%></p>
+            <%}%>
         </div>
     </div>
     <hr>
@@ -29,8 +32,12 @@
         <div class="grid-item-left">
             <h1>Edit Email</h1>
             <p>Want to use a different email? Set it right here.</p>
-            <% include ./partials/signUpMsg%>
-            <% include ./partials/signInMsg%>
+            <%if (typeof edit !== "undefined"){%>
+                <%if (edit === "email"){%>
+                    <% include ./partials/signUpMsg%>
+                    <% include ./partials/signInMsg%>
+                <%}%>
+            <%}%>
         </div>
         <div class="grid-item-right">
             <form action="/dashboard/profile/edit-email" method="POST">
@@ -48,6 +55,12 @@
         <div class="grid-item-left">
             <h1>Edit Username</h1>
             <p>Want to use a different username? Set it right here.</p>
+            <%if (typeof edit !== "undefined"){%>
+                <%if (edit === "username"){%>
+                    <% include ./partials/signUpMsg%>
+                    <% include ./partials/signInMsg%>
+                <%}%>
+            <%}%>
         </div>
         <div class="grid-item-right">
             <form action="/dashboard/profile/edit-username" method="POST">
@@ -65,6 +78,12 @@
         <div class="grid-item-left">
             <h1>Edit Password</h1>
             <p>Want to use a different password? Set it right here.</p>
+            <%if (typeof edit !== "undefined"){%>
+                <%if (edit === "password"){%>
+                    <% include ./partials/signUpMsg%>
+                    <% include ./partials/signInMsg%>
+                <%}%>
+            <%}%>
         </div>
         <div class="grid-item-right">
             <form action="/dashboard/profile/edit-password" method="POST">
@@ -85,6 +104,12 @@
             <h1>Delete Account</h1>
             <p>If you wish to completely delete your account, here is the place to do it.</p>
             <p>This is an irreversible action which will completely wipe all your transactions and data from our database</p>
+            <%if (typeof edit !== "undefined"){%>
+                <%if (edit === "deleteAcc"){%>
+                    <% include ./partials/signUpMsg%>
+                    <% include ./partials/signInMsg%>
+                <%}%>
+            <%}%>
         </div>
         <div class="grid-item-right">
             <form action="">

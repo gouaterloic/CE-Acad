@@ -10,6 +10,7 @@ const Question = require('../models/Question');
 const Result = require('../models/Result');
 const axios = require('axios')
 const fetch = require('node-fetch')
+require("dotenv").config()
 
 
 // Dashboard Home Page
@@ -230,7 +231,7 @@ router.post('/finance/deposit', ensureAuthenticated, (req,res) => {
     const edit = "deposit";
 
     axios.post("https://api.dusupay.com/v1/collections",{
-        api_key:"PUBK-119e4a961a37d9f097396433d65ea91d", 
+        api_key: process.env.API_KEY, 
         currency:"XAF", 
         amount:parseFloat(amount), 
         method:"MOBILE_MONEY", 
@@ -298,7 +299,7 @@ router.post('/finance/withdraw', ensureAuthenticated, (req,res) => {
             if (pass){
                 if (parseFloat(amount)+300 <= req.user.revenue){
                     axios.post("https://api.dusupay.com/v1/payouts",{
-                        api_key:"PUBK-119e4a961a37d9f097396433d65ea91d", 
+                        api_key: process.env.API_KEY, 
                         currency:"XAF", 
                         amount:parseFloat(amount), 
                         method:"MOBILE_MONEY", 
@@ -308,7 +309,7 @@ router.post('/finance/withdraw', ensureAuthenticated, (req,res) => {
                         merchant_reference:parseInt(account_number).toString(36) + (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
                         narration: `Withdraw CE-Acad by ${req.user.username}`
                     },{headers: {
-                        'secret-key': 'SECK-119f98c3f6eac8d3859e312fc7ff60f4'
+                        'secret-key': process.env.SECRET_KEY
                     }})
                     .then(respo=>{ 
                         const data = respo.data.data;

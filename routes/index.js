@@ -41,25 +41,30 @@ router.post('/ressetpass', function(req,res){
                     .then(u=>{
                         if (u){
                             // create reusable transporter object using the default SMTP transport
+                            // let transporter = nodemailer.createTransport({
+                            //     host: "ce-acad.com",
+                            //     port: 465,
+                            //     secure: true, // true for 465, false for other ports
+                            //     auth: {
+                            //     user: "admin@ce-acad.com", // generated ethereal user
+                            //     pass: ".IlovemyGod2CD." // generated ethereal password
+                            //     }
+                            // });
                             let transporter = nodemailer.createTransport({
-                                host: "ce-acad.com",
-                                port: 465,
-                                secure: true, // true for 465, false for other ports
+                                host: "mail.ce-acad.com",
+                                port: 2525,
                                 auth: {
-                                user: "admin@ce-acad.com", // generated ethereal user
-                                pass: ".IlovemyGod2CD." // generated ethereal password
-                                },
-                                tls:{
-                                    rejectUnauthorized: false
+                                  user: "admin@ce-acad.com",
+                                  pass: ".IlovemyGod2CD."
                                 }
-                            });
+                              });
 
                             // send mail with defined transport object
                             transporter.sendMail({
                                 from: '"CE-ACAD" <admin@ce-acad.com>', // sender address
                                 to: `${user.email}`, // list of receivers
                                 subject: "New Password", // Subject line
-                                html: `<p>Dear ${user.username},<br> Your new password is ${password}. Use this password to log into your account. You can always change your password in your profile from your dashboard. <br> Best Regards, <br> CE-Acad</p>` // html body
+                                html: `<p>Dear ${user.username},<br> Your new password is <strong><em>${password}</em></strong>. <br>Use this password to log into your account. You can always change your password in your profile from your dashboard. <br><br> <strong>Best Regards, <br>CE-Acad</strong></p>` // html body
                             })
                             .then(info =>{
                                 console.log(info);

@@ -157,7 +157,7 @@ function displayResults(){
     results.forEach(res=>{
         totalPoints += res[3]
     })
-    // Get questions from Database
+    // Results procession
     xhr.open('POST',`/dashboard/quiz/results`,true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onload = ()=>{

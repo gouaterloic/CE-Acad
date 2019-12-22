@@ -39,7 +39,7 @@ router.post('/', function(req,res){
             errors.push({msg:'Username or Email Already exists'});
             res.render('home',{errors,username,email,password,password2,str});
            }else{
-            const newUser = new User({username,email,password,affiliate});
+            const newUser = new User({username,email,password});
             // Hash Password
             bcrypt.genSalt(10,(err,salt)=>
                 bcrypt.hash(password, salt, (err,hash)=>{
@@ -71,7 +71,6 @@ router.post('/', function(req,res){
                             })
                         }
                     }else{
-                        newUser.affiliate = "admin@ce-acad.com";
                         newUser.save()
                         .then(user => {
                             req.flash(

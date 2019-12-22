@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
+const bodyParser = require('body-parser');
+
+// parse application/json
+app.use(bodyParser.json())
 
 // Make the public folder static
 app.use(express.static(__dirname + '/public'));
@@ -13,7 +17,7 @@ require('./config/passport')(passport);
 
 //DB Config
 //const db = require('./config/keys').MongoURI;
-const db = require('./config/keys').mongoUrl;
+const db = require('./config/keys').MongoURI;
 
 // Connect to Mongo
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -18,6 +18,9 @@
         </div>
         <div class="grid-item-right" id="transactions">
             <p><span class="labels">Revenue:</span> <%=user.revenue%> FCFA</p>
+            <%if(user.role == "admin"){%>
+                <p><span class="labels">Revenue to Redistribute:</span> <%=user.revenue_to_redistribute%></p>
+            <%}%>
             <button class="btn view-transactions">View Transactions</button>
         </div>
     </div>
@@ -41,13 +44,13 @@
                 <p class="labels">Enter Amount (FCFA)</p>
                 <select name="provider_id">
                     <option value="mtn_cm">Cameroon MTN Mobile Money</option>
-                    <option value="mtn_ug">Uganda MTN Mobile Money</option>
+                    <!-- <option value="mtn_ug">Uganda MTN Mobile Money</option>
                     <option value="airtel_ug">Uganda Airtel Money</option>
                     <option value="mpesa_ke">Kenya MPesa</option>
                     <option value="mtn_rw">Rwanda MTN Mobile Money</option>
                     <option value="mtn_gh">Ghana MTN Mobile Money</option>
                     <option value="tigo_gh">Ghana Tigo Mobile Money</option>
-                    <option value="vodafone_gh">Ghana Vodafone Mobile Money</option>
+                    <option value="vodafone_gh">Ghana Vodafone Mobile Money</option> -->
                 </select>
                 <p class="labels">Choose Payment Option</p>
                 <input type="number" name="account_number" placeholder="Example: 237676653984">
@@ -78,13 +81,13 @@
                 <p class="labels">Enter Amount (FCFA)</p>
                 <select name="provider_id">
                     <option value="mtn_cm">Cameroon MTN Mobile Money</option>
-                    <option value="mtn_ug">Uganda MTN Mobile Money</option>
+                    <!-- <option value="mtn_ug">Uganda MTN Mobile Money</option>
                     <option value="airtel_ug">Uganda Airtel Money</option>
                     <option value="mpesa_ke">Kenya MPesa</option>
                     <option value="mtn_rw">Rwanda MTN Mobile Money</option>
                     <option value="mtn_gh">Ghana MTN Mobile Money</option>
                     <option value="tigo_gh">Ghana Tigo Mobile Money</option>
-                    <option value="vodafone_gh">Ghana Vodafone Mobile Money</option>
+                    <option value="vodafone_gh">Ghana Vodafone Mobile Money</option> -->
                 </select>
                 <p class="labels">Choose Payment Option</p>
                 <input type="number" name="account_number" placeholder="Example: 237676653984">

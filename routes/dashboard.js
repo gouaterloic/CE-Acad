@@ -9,7 +9,7 @@ const Quiz = require('../models/Quiz');
 const Question = require('../models/Question');
 const Result = require('../models/Result');
 const axios = require('axios')
-const fetch = require('node-fetch')
+const bodyParser = require('body-parser');
 require("dotenv").config()
 
 
@@ -23,24 +23,23 @@ router.get('/', ensureAuthenticated, (req,res) => {
 // Dashboard Profile Page
 router.get('/profile', ensureAuthenticated, (req,res) => {
     const user = req.user;
-    if(user.affiliate != "admin@ce-acad.com"){
         User.findOne({_id:user.affiliate})
         .then(u=>{
-        console.log(u.email)
         const ref = u.email;
-        if (req.query.edit){
-            res.render('dashboard-profile',{user,ref,edit:req.query.edit})
+        if (ref != "admin@ce-acad.com"){
+            if (req.query.edit){
+                res.render('dashboard-profile',{user,ref,edit:req.query.edit})
+            }else{
+                res.render('dashboard-profile',{user,ref})
+            }
         }else{
-            res.render('dashboard-profile',{user,ref})
+            if (req.query.edit){
+                res.render('dashboard-profile',{user,edit:req.query.edit})
+            }else{
+                res.render('dashboard-profile',{user})
+            }
         }
     })
-    }else{
-        if (req.query.edit){
-            res.render('dashboard-profile',{user,edit:req.query.edit})
-        }else{
-            res.render('dashboard-profile',{user})
-        }
-    }
     
 });
 
@@ -218,9 +217,23 @@ router.get('/finance', ensureAuthenticated, (req,res) => {
 
 // Dashboard Finance Get Transactions
 router.get('/finance/get-transactions', ensureAuthenticated, (req,res) => {
+    var done = 0;
     Transaction.find({$and:[{id_user:req.user.id},{status:"COMPLETED"}]})
     .then(docs=>{
-        res.send(docs)
+        docs.forEach(doc=>{
+            User.findOne({_id:doc.from_to})
+            .then(u=>{
+                if(u.username == req.user.username){
+                    doc.from_to = "You";
+                }else{
+                    doc.from_to = u.username;
+                }
+                done++
+                if(done==docs.length){
+                    res.send(docs)
+                }
+            })
+        })
     })
     .catch(err=>console.log(err))
 })
@@ -250,17 +263,18 @@ router.post('/finance/deposit', ensureAuthenticated, (req,res) => {
             provider: data.provider_id,
             momo_number: account_number,
             old_revenue: req.user.revenue,
-            new_revenue: req.user.revenue,
+            new_revenue: req.user.revenue + data.request_amount,
             id_user: req.user.id,
-            from_to: "You",
+            from_to: req.user.id,
             dusu_ref: data.internal_reference,
-            ref: data.merchant_reference
+            ref: data.merchant_reference,
+            status: "PENDING"
         })
         newTrans.save()
         .then(trans =>{
             req.flash(
                 'success_msg',
-                'Dial Mobile Money Code in your phone and confirm payment'
+                'Dial *126# in your phone and confirm payment. Refresh the page after payment completion, and your deposit should be updated'
             );
             res.redirect('/dashboard/finance/?edit=' + edit)
         })
@@ -276,11 +290,74 @@ router.post('/finance/deposit', ensureAuthenticated, (req,res) => {
 }) 
 
 //Dashboard Deposit Confirm
-router.post('/finance/confirmOurWebhook', (req,res) => {
+router.post('/finance/completed-deposits-and-withdrawals', (req,res) => {
     const webhookHash = req.headers["webhook-hash"];
-    const body = req.body;
-    console.log(body)
-    res.sendStatus(200);
+    const data = req.body;
+    if (webhookHash == "ComprtitiveExaminationAcademe"){
+        if (data.transaction_type == "collection"){
+            Transaction.findOne({dusu_ref:data.internal_reference})
+            .then(t=>{
+                if(data.transaction_status == "COMPLETED"){
+                    Transaction.updateOne({_id:t.id},{$set:{status:"COMPLETED"}})
+                    .then(r=>{
+                        // Update CE-Acad Account
+                        User.findOne({_id:t.id_user})
+                        .then(u=>{
+                            User.updateOne({_id:u.id},{$set:{revenue: u.revenue + data.total_credit}})
+                            .then(user=>{
+                                res.status(200);
+                                res.send();
+                            })
+                            .catch(err=>console.log(err))
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                }else{
+                    Transaction.deleteOne({_id:t.id})
+                    .then(r =>{
+                        res.status(200);
+                        res.send();
+                    })
+                    .catch(err=>console.log(err))
+                }
+            })
+            .catch(err=>console.log(err))
+        }else if (data.transaction_type == "payout"){
+            Transaction.findOne({dusu_ref:data.internal_reference})
+            .then(t=>{
+                if(data.transaction_status == "COMPLETED"){
+                    Transaction.updateOne({_id:t.id},{$set:{status:"COMPLETED"}})
+                    .then(r=>{
+                        res.status(200);
+                        res.send();
+                    })
+                    .catch(err=>console.log(err))
+                }else{
+                    Transaction.deleteOne({_id:t.id})
+                    .then(r =>{
+                        // Update CE-Acad Account
+                        User.findOne({_id:t.id_user})
+                        .then(u=>{
+                            User.updateOne({_id:u.id},{$set:{revenue: u.revenue + data.total_debit}})
+                            .then(user=>{
+                                res.status(200);
+                                res.send();
+                            })
+                            .catch(err=>console.log(err))
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                }
+            })
+            .catch(err=>console.log(err))
+        }else{
+            console.log(req.body)
+            res.status(200);
+            res.send();
+        }
+    }
 })
 
 // Dashboard Finance Withdraw
@@ -321,19 +398,29 @@ router.post('/finance/withdraw', ensureAuthenticated, (req,res) => {
                             provider: data.provider_id,
                             momo_number: account_number,
                             old_revenue: req.user.revenue,
-                            new_revenue: req.user.revenue,
+                            new_revenue: req.user.revenue-data.request_amount-data.transaction_fee,
                             id_user: req.user.id,
-                            from_to: "You",
+                            from_to: req.user.id,
                             dusu_ref: data.internal_reference,
-                            ref: data.merchant_reference
+                            ref: data.merchant_reference,
+                            status: "PENDING"
                         })
                         newTrans.save()
-                        .then(trans =>{
-                            req.flash(
-                                'success_msg',
-                                'We are processing your transaction...'
-                            );
-                            res.redirect('/dashboard/finance/?edit=' + edit)
+                        .then(t =>{
+                            // Update CE-Acad Account
+                            User.findOne({_id:t.id_user})
+                            .then(u=>{
+                                User.updateOne({_id:u.id},{$set:{revenue: u.revenue - data.total_debit}})
+                                .then(user=>{
+                                    req.flash(
+                                        'success_msg',
+                                        'We are processing your transaction... You should receive the money into your MoMo in few seconds'
+                                    );
+                                    res.redirect('/dashboard/finance/?edit=' + edit)
+                                })
+                                .catch(err=>console.log(err))
+                            })
+                            .catch(err=>console.log(err))
                         })
                         .catch(err => console.log(err))
                     })
@@ -541,7 +628,67 @@ router.post('/quiz/results', ensureAuthenticated, (req,res) => {
                 quiz.results = [];
                 quiz.save()
                 .then(q=>{
-                    res.send([{status:"200"}])
+                    // Pay Winner
+                    const trans = [];
+                    User.findOne({_id:result.player1_id})
+                    .then(u=>{
+                        User.updateOne({_id:u.id},{$set:{
+                            revenue: u.revenue+3.2*quiz.registration_fee
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Congrats!! Quiz Winner",
+                                amount: 3.2*quiz.registration_fee,
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue,
+                                new_revenue: u.revenue + 3.2*quiz.registration_fee,
+                                id_user: u.id,
+                                from_to: process.env.ADMIN_ID,
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 2){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
+                                    res.send([{status:"200"}])
+                                })
+                                .catch(err=>console.log(err))
+                            }
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                    // Pay Winner from CE-Acad
+                    User.findOne({email:"admin@ce-acad.com"})
+                    .then(u=>{
+                        User.updateOne({_id:u.id},{$set:{
+                            revenue_to_redistribute: u.revenue_to_redistribute-3.2*quiz.registration_fee
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Payed Winner",
+                                amount: -3.2*quiz.registration_fee,
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue_to_redistribute,
+                                new_revenue: u.revenue_to_redistribute - 3.2*quiz.registration_fee,
+                                id_user: u.id,
+                                from_to: result.player1_id,
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 2){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
+                                    res.send([{status:"200"}])
+                                })
+                                .catch(err=>console.log(err))
+                            }
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
                 })
                 .catch(err=>console.log(err))
             })
@@ -562,6 +709,8 @@ router.post('/quiz/results', ensureAuthenticated, (req,res) => {
 //Dashboard Quiz Register
 router.post('/quiz/register', ensureAuthenticated, (req,res) => {
     const edit = req.body.id;
+    const trans = [];
+    req.body.registration_fee = parseInt(req.body.registration_fee);
     if(!req.body.password){
         req.flash(
             'error_msg',
@@ -574,24 +723,145 @@ router.post('/quiz/register', ensureAuthenticated, (req,res) => {
             if (pass){
                 if(req.user.revenue >= req.body.registration_fee){
                     User.updateOne(
-                        {"email" : req.user.email},
-                        {$set: { "revenue" : req.user.revenue - req.body.registration_fee}},{ upsert: true })
+                        {_id : req.user.id},
+                        {$set: {revenue: req.user.revenue - req.body.registration_fee}},{ upsert: true })
                         .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Quiz Registration",
+                                amount: -req.body.registration_fee,
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: req.user.revenue,
+                                new_revenue: req.user.revenue - req.body.registration_fee,
+                                id_user: req.user.id,
+                                from_to: process.env.ADMIN_ID,
+                                status: "COMPLETED"
+                            }))
                             Quiz.findOne({_id:req.body.id})
                             .then(quiz=>{
-                                console.log(req.user.id)
                                 quiz.registered_users.push(req.user.id)
                                 Quiz.updateOne({_id:req.body.id},{$set:{registered_users:quiz.registered_users}},{ upsert: true })
                                 .then(q=> {
-                                    
+                                    if (trans.length == 5){
+                                        Transaction.insertMany(trans)
+                                        .then(docs=>{
+                                            req.flash(
+                                                'success_msg',
+                                                'Registration Successful'
+                                            );
+                                            res.redirect('/dashboard/quiz/?edit=' + edit)
+                                        })
+                                        .catch(err=>console.log(err))
+                                    }
+                                })
+                                .catch(err=>console.log(err))
+                            })
+                            .catch(err=>console.log(err))
+                        })
+                        .catch(err=>console.log(err))
+
+                    // Pay Affiliates
+                    User.findOne({_id:req.user.affiliate})
+                    .then(u=>{
+                        User.updateOne({_id:req.user.affiliate},{$set:{revenue:u.revenue+0.05*req.body.registration_fee}})
+                        .then(v=>{
+                            trans.push(new Transaction({
+                                type: "Affiliate Due",
+                                amount: 0.05*req.body.registration_fee,
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue,
+                                new_revenue: u.revenue + 0.05*req.body.registration_fee,
+                                id_user: u.id,
+                                from_to: req.user.id,
+                                status: "COMPLETED"
+                            }))
+                            User.findOne({_id:u.affiliate})
+                            .then(u2=>{
+                                User.updateOne({_id:u2.id},{$set:{revenue:u2.revenue+0.05*req.body.registration_fee}})
+                                .then(v=>{
+                                    trans.push(new Transaction({
+                                        type: "Second Order Affiliate Due",
+                                        amount: 0.05*req.body.registration_fee,
+                                        fee: 0,
+                                        currency: "XAF",
+                                        provider: "CE-Acad",
+                                        old_revenue: u2.revenue,
+                                        new_revenue: u2.revenue + 0.05*req.body.registration_fee,
+                                        id_user: u2.id,
+                                        from_to: req.user.id,
+                                        status: "COMPLETED"
+                                    }))
+                                    if (trans.length == 5){
+                                        Transaction.insertMany(trans)
+                                        .then(docs=>{
+                                            req.flash(
+                                                'success_msg',
+                                                'Registration Successful'
+                                            );
+                                            res.redirect('/dashboard/quiz/?edit=' + edit)
+                                        })
+                                        .catch(err=>console.log(err))
+                                    }
+                                })
+                                .catch(err=>console.log(err))
+                            })
+                            .catch(err=>console.log(err))
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+
+                    // Pay CE-Acad (Percentage due and redistribute)
+                    User.findOne({email:"admin@ce-acad.com"})
+                    .then(u=>{
+                        User.updateOne({email:"admin@ce-acad.com"},{$set:{
+                            revenue: u.revenue+0.1*req.body.registration_fee,
+                            revenue_to_redistribute: u.revenue_to_redistribute+0.8*req.body.registration_fee
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Player Registered Gain",
+                                amount: 0.1*req.body.registration_fee,
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue,
+                                new_revenue: u.revenue + 0.1*req.body.registration_fee,
+                                id_user: u.id,
+                                from_to: req.user.id,
+                                status: "COMPLETED"
+                            }))
+                            trans.push(new Transaction({
+                                type: "Player Registered",
+                                amount: 0.8*req.body.registration_fee,
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue_to_redistribute,
+                                new_revenue: u.revenue_to_redistribute + 0.8*req.body.registration_fee,
+                                id_user: u.id,
+                                from_to: req.user.id,
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 5){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
                                     req.flash(
                                         'success_msg',
                                         'Registration Successful'
                                     );
                                     res.redirect('/dashboard/quiz/?edit=' + edit)
                                 })
-                            })
+                                .catch(err=>console.log(err))
+                            }
                         })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+
                 }else{
                     req.flash(
                         'error_msg',
@@ -607,6 +877,7 @@ router.post('/quiz/register', ensureAuthenticated, (req,res) => {
                 res.redirect('/dashboard/quiz/?edit=' + edit)
             }
         })
+        .catch(err=>console.log(err))
     }
     
 })

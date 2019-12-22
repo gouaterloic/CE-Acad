@@ -21,7 +21,7 @@
         <div class="grid-item-right">
             <p><span class="labels">Email:</span> <%=user.email%></p>
             <p><span class="labels">Username:</span> <%=user.username%></p>
-            <%if(user.affiliate != "admin@ce-acad.com"){%>
+            <%if(typeof ref != "undefined"){%>
                 <p><span class="labels">Referrer:</span> <%=ref%></p>
             <%}%>
         </div>

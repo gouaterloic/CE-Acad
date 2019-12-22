@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -17,21 +18,21 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    revenue_to_redistribute: {
+        type: Number,
+        default: 0
+    },
     date: {
         type: Date,
         default: Date.now
     },
     affiliate: {
         type: String,
-        default: "admin@ce-acad.com"
+        default: process.env.ADMIN_ID
     },
     role: {
         type: String,
         default: "member"
-    },
-    revenue_to_redistribute: {
-        type: Number,
-        default:0
     }
 });
 

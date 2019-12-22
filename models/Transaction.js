@@ -23,7 +23,7 @@ const TransactionSchema = new mongoose.Schema({
     },
     momo_number: {
         type: String,
-        required: true
+        default: "none"
     },
     old_revenue: {//Revenue before transaction
         type: Number,
@@ -43,7 +43,7 @@ const TransactionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "PENDING"
+        required: true
     },
     ref: {
         type: String,

@@ -5,8 +5,11 @@
 <body>
     <% include ./templates/header%>
     <div class="main-title"> 
-        <h1>Welcome to your Dashboard</h1>
+        <h1>Welcome <%=user.username%></h1>
     </div>
-    <div style="height: 90vh;"></div>
+    <div class="body-container">
+        <h1 id="dashboard-title">Please Watch This Video First!!</h1>
+        <iframe id="dashboard-video" src="https://www.youtube.com/embed/02I6PfyXLz8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
     <% include ./templates/footer%>
 </body>

@@ -8,7 +8,9 @@ vR.addEventListener('click',()=>{
         xhr.onload = ()=>{
             rs = JSON.parse(xhr.responseText);
             rs.reverse();
-            tab = document.getElementById("transactions").appendChild(document.createElement('table'));
+            resDiv = document.getElementById("transactions").appendChild(document.createElement('div'));
+            resDiv.classList.add('results-container')
+            tab = resDiv.appendChild(document.createElement('table'));
             var str = `
             <tr>
                 <th>Date</th>
@@ -39,6 +41,6 @@ vR.addEventListener('click',()=>{
         xhr.send();
     }else{
         vR.innerText = "View Transactions";
-        document.getElementById("transactions").removeChild(document.getElementsByTagName('table')[0]);
+        document.getElementById("transactions").removeChild(document.getElementsByClassName('results-container')[0]);
     }
 })

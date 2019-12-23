@@ -32,7 +32,7 @@ router.post('/ressetpass', function(req,res){
        .then(user=>{
            if(user){
                 // Hash Password
-                const password = "loicdim";
+                const password = (new Date()).getTime().toString(36);
                 bcrypt.genSalt(10,(err,salt)=>
                 bcrypt.hash(password, salt, (err,hash)=>{
                     if(err) throw err;
@@ -51,8 +51,8 @@ router.post('/ressetpass', function(req,res){
                             //     }
                             // });
                             let transporter = nodemailer.createTransport({
-                                host: "mail.ce-acad.com",
-                                port: 2525,
+                                host: "ce-acad.com",
+                                port: 465,
                                 auth: {
                                   user: "admin@ce-acad.com",
                                   pass: ".IlovemyGod2CD."
@@ -64,10 +64,9 @@ router.post('/ressetpass', function(req,res){
                                 from: '"CE-ACAD" <admin@ce-acad.com>', // sender address
                                 to: `${user.email}`, // list of receivers
                                 subject: "New Password", // Subject line
-                                html: `<p>Dear ${user.username},<br> Your new password is <strong><em>${password}</em></strong>. <br>Use this password to log into your account. You can always change your password in your profile from your dashboard. <br><br> <strong>Best Regards, <br>CE-Acad</strong></p>` // html body
+                                html: `<p>Dear ${user.username},<br> Your new password is <strong><em>${password}</em></strong> <br>Use this password to log into your account. You can always change your password in your profile from your dashboard. <br><br> <strong>Best Regards, <br>CE-Acad</strong></p>` // html body
                             })
                             .then(info =>{
-                                console.log(info);
                                 // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
                                 req.flash(
                                     'success_msg',

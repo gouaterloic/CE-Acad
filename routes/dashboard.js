@@ -16,7 +16,7 @@ require("dotenv").config()
 // Dashboard Home Page
 router.get('/', ensureAuthenticated, (req,res) => {
     res.render('dashboard',{
-        username: req.user.username
+        user: req.user
     })
 });
 

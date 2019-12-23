@@ -6,13 +6,16 @@
 }
 body{
     position: relative;
+    background-color: linen;
 }
 .main-title {
-    height: 3rem;
-    background-color: #c5cae9;
+    height: fit-content;
+    background-color: maroon;
     text-align: center;
     padding: auto;
-    border-bottom: 3px solid #1a237e;
+    border-bottom: 3px solid navy;
+    color: yellow;
+    font-weight: bold;
 }
 
 .main-title h1 {
@@ -24,12 +27,35 @@ body{
 }
 
 footer{
+    display: bock;
     border-top: 3px solid #1a237e;
-    height: 10vh;
+    background-color: maroon;
+    color: yellow;
+    position: fixed;
+    width: 100vw;
+    height: 100vw;
+    padding-left: 6rem;
+    padding-top:0.5rem;
+}
+
+/* footer img{
+    background-color: white;
+    border-radius: 42%;
+    padding: 0.8rem;
+    text-align: center;
+    margin-top: -2.5rem;
+    margin-left: 1rem;
+    border: 3px solid #1a237e;
+} */
+
+.body-container{
+    width: 100vw;
+    height: 73vh;
+    overflow: scroll;
 }
 
 header{
-    width: 80vw;
+    /* width: 80vw; */
     margin: 0 auto;
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
@@ -39,20 +65,23 @@ header a{
     font-size: 1.5rem;
     padding: 0.3rem;
     text-align: center;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-    border-bottom: 2px solid black;
+    border-right: 1px solid yellow;
+    border-left: 1px solid yellow;
+    border-bottom: 2px solid yellow;
+    background-color: navy;
+    color: yellow;
 }
 
 header a:hover{
-    background-color: #283593;
+    background-color: #4cae51;
     color: #fff;
 }
 
 .clickedMenu{
-    background-color: #c5cae9;
-    color: #000;
+    background-color: maroon;
     border-bottom: none;
+    color: yellow;
+    font-weight: bold;
 }
 
 header a i{
@@ -75,7 +104,7 @@ hr {
 }
 
 .grid-item-left h1{
-    color: #1a237e;
+    color: navy;
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
 }
@@ -94,7 +123,7 @@ hr {
 
 .labels{
     font-weight: bold;
-    color: #5c6bc0;
+    color: navy;
 }
 
 input,select{
@@ -102,14 +131,46 @@ input,select{
     border-bottom: 1px solid #1a237e;
     width: 20rem;
     outline: none;
+    background-color: linen;
 }
 
 .btn{
     border-radius: 0.5rem;
     color: azure;
     cursor:pointer;
-    background:#3f51b5;
+    background:navy;
     border: 0 none;
+    width: fit-content;
+    align-self: center;
+    padding: 0.2rem;
+
+}
+
+.btn:focus{
+    outline: none;
+}
+
+#question-answers{
+    background-color: linen;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    margin: 0;
+    min-height: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+#question-answers h1{
+    margin: 2rem;
+    text-align: center;
+}
+
+.btn:hover{
+    background:#4cae51;
+    color: yellow;
 }
 
 .container{
@@ -135,7 +196,7 @@ input,select{
 			0 10px 10px rgba(0,0,0,0.22);
 	position: absolute;
 	overflow: hidden;
-	opacity: 0.85;
+	opacity: 0.9;
 	width: 768px;
 	max-width: 90%;
     min-height: 550px;
@@ -147,7 +208,11 @@ input,select{
 .quiz-container h1,.quiz-container h1 span{
     align-self: center;
     margin: 10px 0;
-    font-size: 2rem;
+    font-size: 1.5rem;
+}
+
+.quiz-container hr{
+    margin: 0;
 }
 
 .quiz-container .btn{
@@ -156,10 +221,22 @@ input,select{
     margin: 20px 0;
 }
 
+.results-container{
+    background-color: linen;
+    width: fit-content;
+    height: 250px;
+    overflow: scroll;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
 table{
     border-collapse: collapse;
     width: 90%;
     align-self: center;
+    margin: 2rem 0;
 }
 
 table tr:nth-child(even){background-color: #f2f2f2;}
@@ -184,22 +261,55 @@ table td, table th {
     background-color: black;
 }
 
-.answers{
-    width: fit-content;
-    align-self: center;
+/* .answers{
     display: grid;
     grid-template-columns: 100%;
-}
+} */
 
 .answers h1{
-    background-color: #3f51b5;
-    width: fit-content;
-    padding: 5px;
+    width: max-content;
+    margin: 2rem 0;
 }
+
+.answers h1:hover{
+    cursor: pointer;
+
+}
+
 .answers h1 span{
-    background-color: #e8eaf6;
-    padding: 2px;
+    padding: 0.5rem;
+    width: fit-content;
+    margin: 0;
 }
+
+.ch{
+    background-color: navy;
+    color: white;
+    border: 1px solid maroon;
+    font-weight: bold;
+}
+
+.ans{
+    background-color: maroon;
+    color: yellow;
+    border: 1px solid navy;
+}
+
+#dashboard-title{
+    font-size: 2rem;
+    font-weight: bold;
+    color: navy;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#dashboard-video{
+    width: 50%;
+    height: 50vh;
+    margin: 0 25%;
+    border: 3px solid navy;
+}
+
 @media screen and (max-width: 1000px){
     .grid-container{
         width: 80vw;
@@ -214,12 +324,20 @@ table td, table th {
     .grid-item-right{
         margin-top: 0.6rem;
     }
+    #dashboard-video{
+        width: 80%;
+        margin: 0 10%;
+    }
 }
 
 @media screen and (max-width: 560px){
     header a span{
         visibility: hidden;
         position: absolute;
+    }
+    #dashboard-video{
+        width: 80%;
+        margin: 0 10%;
     }
 }
 
@@ -239,7 +357,10 @@ margin-top: 10px;
 
 #quiz-layer{
     position: absolute;
-    background-color: blueviolet;
+    background-image: url("/img/background.png");
+	background-position: center;
+  	background-repeat: no-repeat;
+	background-size: cover;
     width: 100%;
     height: 100%;
     z-index: 10;

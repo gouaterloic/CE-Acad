@@ -6,10 +6,10 @@ var xhr = new XMLHttpRequest;
 var questions = [];
 var results = [];//label correctAnswer choosenAnswer Point
 var questionNum = 1;
-const numberOfQuestions = 3;
+const numberOfQuestions = 15;
 var randomIndex = 0;
 var started = false;
-var timeLeft = 300;
+var timeLeft = 90;
 var countDownfun;
 var quiz;
 
@@ -19,25 +19,25 @@ if(typeof play !== undefined){
         play.forEach(p=>{
             p.addEventListener('click',()=>{
                 // Quiz Home Page
-                questionLabel = document.getElementsByClassName('quiz-container')[0].appendChild(document.createElement('h1'));
+                questionLabel = document.getElementById('question-answers').appendChild(document.createElement('h1'));
                 questionLabel.id = "question-label";
                 questionLabel.innerText = "Ready? Select any answer below to start the quiz"
-                answersDiv = document.getElementsByClassName('quiz-container')[0].appendChild(document.createElement('div'));
-                answersDiv.classList.add("answers");
+                answersDiv = document.getElementById('question-answers').appendChild(document.createElement('div'));
+                answersDiv.classList.add("answers"); 
                 answersDiv.innerHTML = `
-                    <h1 class="answer">A <span id="choice0">God</span></h1>
-                    <h1 class="answer">B <span id="choice1">Loves</span></h1>
-                    <h1 class="answer">C <span id="choice2">You</span></h1>
-                    <h1 class="answer">D <span id="choice3">As Himself</span></h1>
+                    <h1 class="answer"><span class="ch">A</span><span class="ans" id="choice0">God</span></h1>
+                    <h1 class="answer"><span class="ch">B</span><span class="ans" id="choice1">Loves</span></h1>
+                    <h1 class="answer"><span class="ch">C</span><span class="ans" id="choice2">You</span></h1>
+                    <h1 class="answer"><span class="ch">D</span><span class="ans" id="choice3">As Himself</span></h1>
                 `;
                 choiceSelect()
-                cancel = document.getElementsByClassName('quiz-container')[0].appendChild(document.createElement('button'));
+                cancel = document.getElementById('question-answers').appendChild(document.createElement('button'));
                 cancel.classList.add('btn');
                 cancel.innerText = "Cancel"
                 cancel.addEventListener('click',()=>{
-                    document.getElementsByClassName('quiz-container')[0].removeChild(document.getElementsByClassName('answers')[0]);
-                    document.getElementsByClassName('quiz-container')[0].removeChild(document.getElementById("question-label"));
-                    document.getElementsByClassName('quiz-container')[0].removeChild(document.getElementsByTagName('button')[0]);
+                    document.getElementById('question-answers').removeChild(document.getElementsByClassName('answers')[0]);
+                    document.getElementById('question-answers').removeChild(document.getElementById("question-label"));
+                    document.getElementById('question-answers').removeChild(document.getElementsByTagName('button')[0]);
                     quizLayer.style.visibility = "hidden";
                 })
                 // Get questions from Database
@@ -80,7 +80,7 @@ function choiceSelect(){
                 }
             }else{
                 started = true;
-                document.getElementsByClassName('quiz-container')[0].removeChild(document.getElementsByTagName('button')[0]);
+                document.getElementById('question-answers').removeChild(document.getElementsByTagName('button')[0]);
                 randomIndex = Math.floor(Math.random() * questions.length);
                 displayQuestion(questions[randomIndex],[questionNum,numberOfQuestions]);
                 questions.splice(randomIndex,1);
@@ -103,7 +103,10 @@ if(typeof viewResults !== undefined){
                     xhr.onload = ()=>{
                         rs = JSON.parse(xhr.responseText);
                         rs.reverse();
-                        tab = document.getElementById(`${vR.dataset.id}`).appendChild(document.createElement('table'));
+                        resDiv = document.getElementById(`${vR.dataset.id}`).appendChild(document.createElement('div'));
+                        resDiv.classList.add('results-container')
+                        resDiv.id = `div${vR.dataset.id}`
+                        tab = resDiv.appendChild(document.createElement('table'));
                         var str = `
                         <tr>
                             <th>Session</th>
@@ -132,7 +135,7 @@ if(typeof viewResults !== undefined){
                     xhr.send();
                 }else{
                     vR.innerText = "View Results";
-                    document.getElementById(`${vR.dataset.id}`).removeChild(document.getElementsByTagName('table')[0]);
+                    document.getElementById(`${vR.dataset.id}`).removeChild(document.getElementById(`div${vR.dataset.id}`));
                 }
             })
         })
@@ -163,12 +166,12 @@ function displayResults(){
     xhr.onload = ()=>{
         var s = JSON.parse(xhr.responseText);
         // Displaying Results Proper
-        document.getElementsByClassName('quiz-container')[0].removeChild(document.getElementsByClassName('answers')[0]);
-        document.getElementsByClassName('quiz-container')[0].removeChild(document.getElementById("question-label"));
+        document.getElementById('question-answers').removeChild(document.getElementsByClassName('answers')[0]);
+        document.getElementById('question-answers').removeChild(document.getElementById("question-label"));
         document.getElementById("count-down").innerText = "Quiz Results";
         document.getElementById("title").innerText = "Score: ";
         document.getElementById("question-number").innerText = totalPoints;
-        tab = document.getElementsByClassName('quiz-container')[0].appendChild(document.createElement('table'));
+        tab = document.getElementById('question-answers').appendChild(document.createElement('table'));
         var str = `
         <tr>
             <th>No</th>
@@ -204,9 +207,9 @@ function displayResults(){
             }
         })
         tab.innerHTML = str;
-        done = document.getElementsByClassName('quiz-container')[0].appendChild(document.createElement('button'));
+        done = document.getElementById('question-answers').appendChild(document.createElement('button'));
         done.classList.add('btn');
-        done.innerHTML = `<a href="/dashboard/quiz/">Done</a>`
+        done.innerHTML = `<a style="color:white;" href="/dashboard/quiz/">Done</a>`
     };
     xhr.send(`totalPoints=${totalPoints}&quizID=${quiz.id}&numberOfQuestions=${numberOfQuestions}`);
 }

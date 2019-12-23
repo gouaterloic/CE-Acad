@@ -1,9 +1,17 @@
 <footer>
-    <!-- <img src="/img/logo-transparent.png" alt="logo" height="40vh" width="200rem"> -->
-    <p><i class="fas fa-phone"></i><span> +237 676 65 39 84</span></p>
-    <p><i class="fab fa-whatsapp"></i><span> +237 676 65 39 84</span></p>
-    <p><i class="far fa-envelope"></i><span> admin@ce-acad.com</span></p>
-    <p>CE-Acad &copy<span> <%=new Date().getFullYear()%></span></p>
+    <div class="grid-item-left">
+        <h1>Contact Us</h1>
+        <p>In case of any difficulties, use these parameters to get to us.</p>
+        <p>The Live Chat is also available and is the fastest means to get to us.</p>
+        <p>We are also open to receive your appraisals, critics, and recommendations for your better experience.</p>
+    </div>
+    <div class="grid-item-right">
+        <p><i class="fas fa-phone"></i><span class="labels"> +237 676 65 39 84</span></p>
+        <p><i class="fab fa-whatsapp"></i><span class="labels"> +237 676 65 39 84</span></p>
+        <p><i class="far fa-envelope"></i><span class="labels"> admin@ce-acad.com</span></p>
+        <img src="/img/logo-transparent.png" style="padding-top: 0.8rem;" alt="logo" height="40vh">
+        <p style="padding-left: 2rem;">CE-Acad &copy<span> <%=new Date().getFullYear()%></span></p>
+    </div>
 </footer>
 <script>
     const clickedMenu = document.getElementById(document.title.slice(10));

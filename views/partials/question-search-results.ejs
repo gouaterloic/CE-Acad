@@ -2,6 +2,7 @@
     <%if (doc.length>0){%>
         <% doc.forEach(d => {%>
             <div class="row blue container col s12 z-depth-4">
+                <p class="col s12"><strong><%=d.id%></strong></p>
                 <p class="col s12"><strong><%=d.label%></strong></p>
                 <p class="col s3"><strong>A: </strong><%=d.answers[0]%></p>
                 <p class="col s3"><strong>B: </strong><%=d.answers[1]%></p>

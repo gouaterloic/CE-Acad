@@ -36,7 +36,7 @@ const TransactionSchema = new mongoose.Schema({
     id_user: {// ID of user concerned
         type: String,
         required: true
-    },
+    }, 
     from_to: {
         type: String,
         required: true

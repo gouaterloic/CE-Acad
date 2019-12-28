@@ -6,10 +6,10 @@ var xhr = new XMLHttpRequest;
 var questions = [];
 var results = [];//label correctAnswer choosenAnswer Point
 var questionNum = 1;
-const numberOfQuestions = 15;
+var numberOfQuestions = 0;
 var randomIndex = 0;
 var started = false;
-var timeLeft = 90;
+var timeLeft = 0;
 var countDownfun;
 var quiz;
 
@@ -18,6 +18,8 @@ if(typeof play !== undefined){
     if(play.length>0){
         play.forEach(p=>{
             p.addEventListener('click',()=>{
+                numberOfQuestions = p.dataset.numberofquestions;
+                timeLeft = p.dataset.duration;
                 // Quiz Home Page
                 questionLabel = document.getElementById('question-answers').appendChild(document.createElement('h1'));
                 questionLabel.id = "question-label";
@@ -92,7 +94,6 @@ function choiceSelect(){
 }
 
 // View Results
-// Take Quiz Now Button Callback
 if(typeof viewResults !== undefined){
     if(viewResults.length>0){
         viewResults.forEach(vR=>{
@@ -110,25 +111,21 @@ if(typeof viewResults !== undefined){
                         var str = `
                         <tr>
                             <th>Session</th>
-                            <th>Date</th>
-                            <th>First</th>
-                            <th>Second</th>
-                            <th>Third</th>
-                            <th>Fourth</th>
-                        </tr>
-                        `;
+                            <th>Date</th>`
+                            rs[0].players_id.forEach((pid,ind)=>{
+                                str += `<th>Postion ${ind+1}</th>`
+                            })
+                        str += `</tr>`;
                         rs.forEach((r,ind)=>{
                             dat = new Date(r.date);
                             str += `
                             <tr>
                                 <td>${r.round}</td>
-                                <td>${dat.toDateString()}</td>
-                                <td>${r.player1_id}(${r.player1_points})</td>
-                                <td>${r.player2_id}(${r.player2_points})</td>
-                                <td>${r.player3_id}(${r.player3_points})</td>
-                                <td>${r.player4_id}(${r.player4_points})</td>
-                            </tr>
-                            `
+                                <td>${dat.toDateString()}</td>`
+                                r.players_id.forEach((pid,ind)=>{
+                                    str += `<td>${pid}(${r.players_points[ind]})</td>`
+                                })
+                            str += `</tr>`
                         })
                         tab.innerHTML = str;
                     };
@@ -155,6 +152,8 @@ function displayQuestion(question,pos){
 }
 
 function displayResults(){
+    // Remove answers
+    document.getElementById('question-answers').removeChild(document.getElementsByClassName('answers')[0]);
     // Calculate total points
     var totalPoints = 0;
     results.forEach(res=>{
@@ -166,7 +165,6 @@ function displayResults(){
     xhr.onload = ()=>{
         var s = JSON.parse(xhr.responseText);
         // Displaying Results Proper
-        document.getElementById('question-answers').removeChild(document.getElementsByClassName('answers')[0]);
         document.getElementById('question-answers').removeChild(document.getElementById("question-label"));
         document.getElementById("count-down").innerText = "Quiz Results";
         document.getElementById("title").innerText = "Score: ";

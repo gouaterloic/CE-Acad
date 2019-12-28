@@ -35,22 +35,21 @@
                 </div>
                 <div class="grid-item-right " id= <%=q.id%>>
                     <p><span class="labels">Session: </span> <%=q.round%></p>
-                    <p><span class="labels">Current Number of Participants: </span> <%=q.current_participants%></p>
                     <p><span class="labels">Registration Fee: </span> <%=q.registration_fee%> FCFA</p>
                     <p><span class="labels">Winning Price: </span> <%=q.winning_price%> FCFA per session</p><br>
                     <%if (q.played_users.includes(user.id)){%>
-                        <p class="labels">Waiting for the next <%=4-q.current_participants%> participant(s)</p>
+                        <p class="labels">Waiting for the next participants</p>
                     <%}else if (q.registered_users.includes(user.id)) {%>
-                        <button class="btn play" data-id = <%=q.id%> data-subject = <%=q.subject%> data-topic = <%=q.topic%> data-level = <%=q.level%> >Take Quiz Now</button>
+                        <button class="btn play" data-id = <%=q.id%> data-subject = <%=q.subject%> data-topic = <%=q.topic%> data-level = <%=q.level%> data-numberOfQuestions = <%=q.number_of_questions%>  data-duration = <%=q.duration%> >Take Quiz Now</button>
                     <%}else{%>
                         <form action="/dashboard/quiz/register" method="POST">
                             <input type="hidden" name="id" value = <%=q.id%> >
                             <input type="hidden" name="registration_fee" value = <%=q.registration_fee%> >
                             <input type="password" name="password">
                             <p class="labels">Enter password</p><br>
-                            <button type="submit" id="submit-form" class="btn register" style="visibility: hidden;">Register</button>
+                            <button type="submit" id=<%="'"+q.id+"'"%> class="btn register" style="visibility: hidden;">Register</button>
                         </form>
-                        <label for="submit-form" class="btn" tabindex="0">Register</label>
+                        <label for=<%="'"+q.id+"'"%> class="btn" tabindex="0">Register</label>
                     <%}%> 
                     <button class="btn view-results" data-id = <%=q.id%> >View Results</button>   
                 </div>

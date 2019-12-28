@@ -13,36 +13,12 @@ const ResultSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    player1_id: {
-        type: String,
+    players_id: {
+        type: Array,
         required: true
     },
-    player1_points: {
-        type: Number,
-        required: true
-    },
-    player2_id: {
-        type: String,
-        required: true
-    },
-    player2_points: {
-        type: Number,
-        required: true
-    },
-    player3_id: {
-        type: String,
-        required: true
-    },
-    player3_points: {
-        type: Number,
-        required: true
-    },
-    player4_id: {
-        type: String,
-        required: true
-    },
-    player4_points: {
-        type: Number,
+    players_points: {
+        type: Array,
         required: true
     },
     date: {

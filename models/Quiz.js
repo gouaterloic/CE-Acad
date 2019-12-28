@@ -45,6 +45,18 @@ const QuizSchema = new mongoose.Schema({
         type: Number,
         default: 1
     },
+    number_of_questions: {
+        type: Number,
+        required: true
+    },
+    maximum_participants: {
+        type: Number,
+        required: true
+    },
+    duration: {
+        type: Number,
+        required: true
+    },
     results: {
         type: Array,
         default: []

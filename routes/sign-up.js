@@ -10,6 +10,7 @@ router.get('/', forwardAuthenticated, (req, res) => res.redirect('/'));
 router.post('/', function(req,res){
     // Values optained from user
     const {username, email, password, password2,affiliate} = req.body;
+    const referrer_link = `https://ce-acad.com?referrer=${username.split(" ").join("-").toLowerCase()}`
     let str = 'signUp';
     // Validation
     const errors = [];
@@ -31,15 +32,15 @@ router.post('/', function(req,res){
     }
     
     if(errors.length > 0){
-        res.render('home',{errors,username,email,password,password2,str});
+        res.render('home',{errors,username,email,password,password2,affiliate,str});
     } else{
        User.findOne({$or:[{username:username},{email:email}]})
        .then(user=>{
            if(user){
             errors.push({msg:'Username or Email Already exists'});
-            res.render('home',{errors,username,email,password,password2,str});
+            res.render('home',{errors,username,email,password,password2,affiliate,str});
            }else{
-            const newUser = new User({username,email,password});
+            const newUser = new User({username,email,referrer_link,password});
             // Hash Password
             bcrypt.genSalt(10,(err,salt)=>
                 bcrypt.hash(password, salt, (err,hash)=>{
@@ -49,13 +50,13 @@ router.post('/', function(req,res){
                     if(affiliate){
                         if(!uf.isEmail(affiliate)){
                             errors.push({msg:"Enter valid email for referrer (leave blank if no referrer)"});
-                            res.render('home',{errors,username,email,password,password2,str});
+                            res.render('home',{errors,username,email,password,password2,affiliate,str});
                         }else{
                             User.findOne({email:affiliate})
                             .then(doc=>{
                                 if(!doc){
                                     errors.push({msg:"No Member with Referrer's Email (leave blank if no referrer)"});
-                                    res.render('home',{errors,username,email,password,password2,str});
+                                    res.render('home',{errors,username,email,password,password2,affiliate,str});
                                 }else{
                                     newUser.affiliate = doc.id;
                                     newUser.save()

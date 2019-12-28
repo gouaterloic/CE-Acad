@@ -121,7 +121,7 @@ router.post('/profile/edit-username', ensureAuthenticated, (req,res) => {
                     }else{
                         User.updateOne(
                         {"username" : req.user.username},
-                        {$set: { "username" : username}})
+                        {$set: { "username" : username, "referrer_link":`https://ce-acad.com?referrer=${username.split(" ").join("-").toLowerCase()}`}})
                         .then(user=>{
                             req.flash(
                                 'success_msg',
@@ -885,6 +885,31 @@ router.post('/quiz/register', ensureAuthenticated, (req,res) => {
     
 })
 
+router.get('/profile/get-referree', ensureAuthenticated, (req,res) => {
+    User.find({affiliate:req.user.id})
+    .then(docs=>{
+        res.send(docs)
+    })
+    .catch(err=>console.log(err))
+})
+
+// router.get('/profile/set-referrer-link', ensureAuthenticated, (req,res) => {
+//     var done = 0;
+//     User.find()
+//     .then(docs=>{
+//         docs.forEach(doc=>{
+//             doc.referrer_link = `https://ce-acad.com?referrer=${doc.username.split(" ").join("-").toLowerCase()}`
+//             done++
+//             doc.save()
+//             .then(d=>{
+//                 if(done==docs.length){
+//                     res.send("Done")
+//                 }
+//             })
+//         })
+//     })
+//     .catch(err=>console.log(err))
+// })
 // router.get('/correctTrans', ensureAuthenticated, (req,res) => {
 //     var newV = 0;
 //     var newVRed = 0;

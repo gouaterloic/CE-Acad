@@ -19,12 +19,14 @@
                 <p>Your email is particularly important. You'll use it both to log in and as affiliate identity.</p>
                 <p>Your username is used as your identity for all that concerns the quiz.</p>
             </div>
-            <div class="grid-item-right">
+            <div class="grid-item-right" id="transactions">
                 <p><span class="labels">Email:</span> <%=user.email%></p>
                 <p><span class="labels">Username:</span> <%=user.username%></p>
                 <%if(typeof ref != "undefined"){%>
                     <p><span class="labels">Referrer:</span> <%=ref%></p>
                 <%}%>
+                <p><span class="labels">Affiliate Link:</span> <%=user.referrer_link%></p>
+                <button class="btn view-referree">View Referree</button>
             </div>
         </div>
         <hr>
@@ -124,4 +126,5 @@
         <% include ./templates/footer%>
     </div>
 </div>
+<script type="text/javascript" src="/js/mainProfile.js"></script>
 </body>

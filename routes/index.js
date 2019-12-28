@@ -6,7 +6,21 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require("nodemailer");
 const { forwardAuthenticated } = require('../config/auth');
 
-router.get('/', forwardAuthenticated,(req,res) => res.render('home'))
+router.get('/', forwardAuthenticated,(req,res) => {
+    if(typeof req.query.referrer == "undefined"){
+        res.render('home')
+    }else{
+        User.findOne({referrer_link:`https://ce-acad.com?referrer=${req.query.referrer}`})
+        .then(doc=>{
+            if(doc){
+                res.render('home',{affiliate:doc.email})
+            }else{
+                res.render('home')
+            }
+        })
+    }
+    
+})
 
 router.post('/ressetpass', function(req,res){
     // Values optained from user

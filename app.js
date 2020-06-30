@@ -5,6 +5,8 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const schedule = require('node-schedule');
+const axios = require('axios')
 
 // parse application/json
 app.use(bodyParser.json())
@@ -16,8 +18,8 @@ app.use(express.static(__dirname + '/public'));
 require('./config/passport')(passport);
 
 //DB Config
-//const db = require('./config/keys').MongoURI;
 const db = require('./config/keys').MongoURI;
+//const db = require('./config/keys').mongoUrl;
 
 // Connect to Mongo
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -65,6 +67,19 @@ app.use('/signout',require('./routes/sign-out'));
 app.use('/dashboard',require('./routes/dashboard'));
 app.use('/admin',require('./routes/admin'));
 
+// Run code at midnight
+schedule.scheduleJob({hour: 22, minute: 58}, ()=>{
+  axios.post("https://ce-acad.com/dashboard/quiz/session-expired-results",{
+        totalPoints: 50, 
+        quizID:'5e18e7621c9d440000fedbe1', 
+        numberOfQuestions:50,
+        role: "admin"
+    })
+    .then(respo=>{
+      console.log('Completed')
+    })
+    .catch(err=>console.log(err))
+})
 
 // Launch server on PORT allocated
 app.listen(process.env.PORT || 5000, console.log(`Server started on port ${process.env.PORT || 5000}`));

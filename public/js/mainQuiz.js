@@ -1,7 +1,7 @@
 const play = Array.from(document.getElementsByClassName('play'));
 const viewResults = Array.from(document.getElementsByClassName('view-results'));
 const quizLayer = document.getElementById('quiz-layer');
-
+const reg = document.getElementById('registerBtn');
 var xhr = new XMLHttpRequest;
 var questions = [];
 var results = [];//label correctAnswer choosenAnswer Point
@@ -12,6 +12,12 @@ var started = false;
 var timeLeft = 0;
 var countDownfun;
 var quiz;
+
+if(reg){
+    reg.addEventListener('click',()=>{
+        reg.style.visibility = "hidden";
+    })
+}
 
 // Take Quiz Now Button Callback
 if(typeof play !== undefined){
@@ -54,7 +60,7 @@ if(typeof play !== undefined){
                     }
                     document.getElementById("count-down").innerText = timeDisplay(timeLeft);
                     document.getElementById("question-number").innerText = 0;
-                    document.getElementById("number-of-questions").innerText = numberOfQuestions;
+                    //document.getElementById("number-of-questions").innerText = numberOfQuestions;
                     quizLayer.style.visibility = "visible";
                 };
                 xhr.send();
@@ -69,7 +75,7 @@ function choiceSelect(){
     choices.forEach((choice,ind)=>{
         choice.addEventListener('click',()=>{
             if (started){
-                results[results.length-1][2] = document.getElementById(`choice${String(ind)}`).innerText
+                results[results.length-1][2] = document.getElementById(`choice${String(ind)}`).textContent
                 results[results.length-1][3] = results[results.length-1][2] === results[results.length-1][1] ? 1 : 0;
                 if (questionNum<numberOfQuestions){
                     questionNum++
@@ -78,7 +84,12 @@ function choiceSelect(){
                     questions.splice(randomIndex,1)
                 }else{
                     clearInterval(countDownfun);
-                    displayResults()
+                    if (quiz.subject != "English Prepare"){
+                        displayResults()
+                    }
+                    else{
+                        displayResultsPrepare()
+                    }
                 }
             }else{
                 started = true;
@@ -108,24 +119,28 @@ if(typeof viewResults !== undefined){
                         resDiv.classList.add('results-container')
                         resDiv.id = `div${vR.dataset.id}`
                         tab = resDiv.appendChild(document.createElement('table'));
-                        var str = `
-                        <tr>
-                            <th>Session</th>
-                            <th>Date</th>`
-                            rs[0].players_id.forEach((pid,ind)=>{
-                                str += `<th>Postion ${ind+1}</th>`
-                            })
-                        str += `</tr>`;
+                        var str = '';
                         rs.forEach((r,ind)=>{
                             dat = new Date(r.date);
                             str += `
                             <tr>
-                                <td>${r.round}</td>
-                                <td>${dat.toDateString()}</td>`
-                                r.players_id.forEach((pid,ind)=>{
-                                    str += `<td>${pid}(${r.players_points[ind]})</td>`
-                                })
-                            str += `</tr>`
+                                <th colspan="3">Session ${r.round} - ${dat.toDateString()} - ${r.players_id.length} Participants</th> 
+                            </tr>
+                            <tr>
+                                <th>Position</th> 
+                                <th>Name</th> 
+                                <th>Points</th> 
+                            </tr>
+                            `
+                            r.players_id.forEach((pid,ind)=>{
+                                str += `
+                                <tr>
+                                    <td>${ind+1}</td> 
+                                    <td>${pid}</td> 
+                                    <td>${r.players_points[ind]}</td> 
+                                </tr>
+                                `
+                            })
                         })
                         tab.innerHTML = str;
                     };
@@ -142,12 +157,12 @@ if(typeof viewResults !== undefined){
 // Functions
 function displayQuestion(question,pos){
     document.getElementById("question-number").innerText = pos[0]
-    document.getElementById("number-of-questions").innerText = pos[1]
+    //document.getElementById("number-of-questions").innerText = pos[1]
     document.getElementById("question-label").innerText = question.label
-    document.getElementById("choice0").innerText = question.answers[0]
-    document.getElementById("choice1").innerText = question.answers[1]
-    document.getElementById("choice2").innerText = question.answers[2]
-    document.getElementById("choice3").innerText = question.answers[3]
+    document.getElementById("choice0").textContent = question.answers[0]
+    document.getElementById("choice1").textContent = question.answers[1]
+    document.getElementById("choice2").textContent = question.answers[2]
+    document.getElementById("choice3").textContent = question.answers[3]
     results.push([question.label,question.correct,"",0])
 }
 
@@ -217,7 +232,12 @@ function countDown(){
     document.getElementById("count-down").innerText = timeDisplay(timeLeft);
     if (timeLeft==0){
         clearInterval(countDownfun);
-        displayResults()
+        if (quiz.subject != "English Prepare"){
+            displayResults()
+        }
+        else{
+            displayResultsPrepare()
+        }
     }
 }
 
@@ -230,4 +250,58 @@ function timeDisplay(tim){
     else{
         return `Time Left: 0${min} : ${sec}`
     }
+}
+
+function displayResultsPrepare(){
+     // Remove answers
+     document.getElementById('question-answers').removeChild(document.getElementsByClassName('answers')[0]);
+     // Calculate total points
+     var totalPoints = 0;
+     results.forEach(res=>{
+         totalPoints += res[3]
+     })
+    // Displaying Results Proper
+    document.getElementById('question-answers').removeChild(document.getElementById("question-label"));
+    document.getElementById("count-down").innerText = "Quiz Results";
+    document.getElementById("title").innerText = "Score: ";
+    document.getElementById("question-number").innerText = totalPoints;
+    tab = document.getElementById('question-answers').appendChild(document.createElement('table'));
+    var str = `
+    <tr>
+        <th>No</th>
+        <th>Question</th>
+        <th>Correct Answer</th>
+        <th>Chosen Answer</th>
+        <th>Point Obtained</th>
+    </tr>
+    `;
+    results.forEach((res,ind)=>{
+        if (res[2]){
+            if (res[3]>0){
+                str += `
+                <tr>
+                    <td>${ind+1}</td>
+                    <td>${res[0]}</td>
+                    <td>${res[1]}</td>
+                    <td style = "color:green;">${res[2]}</td>
+                    <td>${res[3]}</td>
+                </tr>
+                `
+            }else{
+                str += `
+                <tr>
+                    <td>${ind+1}</td>
+                    <td>${res[0]}</td>
+                    <td>${res[1]}</td>
+                    <td style = "color:red;">${res[2]}</td>
+                    <td>${res[3]}</td>
+                </tr>
+                `
+            }
+        }
+    })
+    tab.innerHTML = str;
+    done = document.getElementById('question-answers').appendChild(document.createElement('button'));
+    done.classList.add('btn');
+    done.innerHTML = `<a style="color:white;" href="/dashboard/quiz/">Done</a>`
 }

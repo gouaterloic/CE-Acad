@@ -212,15 +212,16 @@ input,select{
 	border-radius: 10px;
   	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
 			0 10px 10px rgba(0,0,0,0.22);
-	position: absolute;
-	overflow: hidden;
+	position: fixed;
+	overflow: scroll;
 	opacity: 0.9;
 	width: 768px;
 	max-width: 90%;
-    min-height: 550px;
+    height: 90vh;
     z-index: 1000;
     display: flex;
     flex-direction: column;
+    margin-top: 5px;
 }
 
 .quiz-container h1,.quiz-container h1 span{
@@ -392,5 +393,5 @@ margin-top: 10px;
     visibility: hidden;
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
 }

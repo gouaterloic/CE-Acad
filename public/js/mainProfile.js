@@ -22,7 +22,7 @@ vR.addEventListener('click',()=>{
                 str += `
                 <tr>
                     <td>${dat.toDateString()}</td>
-                    <td>${r.username}</td>
+                    <td>${r.username} (${r.email})</td>
                 </tr>
                 `
             })

@@ -7,7 +7,7 @@
         <div class="quiz-container">
             <h1 id="count-down"></h1>
             <hr class="count-down">
-            <h1><span id="title">Question: </span> <span id="question-number"></span> / <span id="number-of-questions"></span></h1>
+            <h1><span id="title">Question: </span> <span id="question-number"></span> <span id="number-of-questions"></span></h1>
             <hr class="count-down">
             <div id="question-answers"></div>
         </div>
@@ -34,11 +34,16 @@
                     <%}%>
                 </div>
                 <div class="grid-item-right " id= <%=q.id%>>
-                    <p><span class="labels">Session: </span> <%=q.round%></p>
-                    <p><span class="labels">Registration Fee: </span> <%=q.registration_fee%> FCFA</p>
-                    <p><span class="labels">Winning Price: </span> <%=q.winning_price%> FCFA per session</p><br>
-                    <%if (q.played_users.includes(user.id)){%>
-                        <p class="labels">Waiting for the next participants</p>
+                    <%if (q.subject !== "English Prepare"){%>
+                        <p><span class="labels">Day: </span> <%=q.round%></p>
+                        <p><span class="labels">Registration Fee: </span> <%=q.registration_fee%> FCFA</p>
+                        <p><span class="labels">Awards per Day: </span>Maximum of 2000 FCFA per Winner Daily <strong><em> (Read the quiz instructions for better understanding)</em></strong></p>
+                        <!-- <p><span class="labels">&nbsp; &nbsp; &nbsp; &nbsp; 1st Position: </span> 50% of cash</p>
+                        <p><span class="labels">&nbsp; &nbsp; &nbsp; &nbsp; 2nd Position: </span> 30% of cash</p>
+                        <p><span class="labels">&nbsp; &nbsp; &nbsp; &nbsp; 3rd Position: </span> 20% of cash</p><br> -->
+                    <%}%>
+                    <%if (q.subject == "English Prepare"){%>
+                        <button class="btn play" data-id = <%=q.id%> data-subject ="English Prepare" data-topic = <%=q.topic%> data-level = <%=q.level%> data-numberOfQuestions = <%=q.number_of_questions%>  data-duration = <%=q.duration%> >Prepare Now</button>
                     <%}else if (q.registered_users.includes(user.id)) {%>
                         <button class="btn play" data-id = <%=q.id%> data-subject = <%=q.subject%> data-topic = <%=q.topic%> data-level = <%=q.level%> data-numberOfQuestions = <%=q.number_of_questions%>  data-duration = <%=q.duration%> >Take Quiz Now</button>
                     <%}else{%>
@@ -49,14 +54,17 @@
                             <p class="labels">Enter password</p><br>
                             <button type="submit" id=<%="'"+q.id+"'"%> class="btn register" style="visibility: hidden;">Register</button>
                         </form>
-                        <label for=<%="'"+q.id+"'"%> class="btn" tabindex="0">Register</label>
+                        <label for=<%="'"+q.id+"'"%> class="btn" tabindex="0" id="registerBtn" style="visibility: hidden;">Register</label>
                     <%}%> 
-                    <button class="btn view-results" data-id = <%=q.id%> >View Results</button>   
+                    <%if (q.subject != "English Prepare"){%>
+                        <button class="btn view-results" data-id = <%=q.id%> >View Results</button>  
+                    <%}%>  
                 </div>
             </div>
         <%})%>
         <hr>
         <% include ./templates/footer%>
     </div>
+
     <script type="text/javascript" src="/js/mainQuiz.js"></script>
 </body>

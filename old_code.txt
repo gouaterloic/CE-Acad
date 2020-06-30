@@ -1,0 +1,477 @@
+// router.get('/profile/set-referrer-link', ensureAuthenticated, (req,res) => {
+//     var done = 0;
+//     User.find()
+//     .then(docs=>{
+//         docs.forEach(doc=>{
+//             doc.referrer_link = `https://ce-acad.com?referrer=${doc.username.split(" ").join("-").toLowerCase()}`
+//             done++
+//             doc.save()
+//             .then(d=>{
+//                 if(done==docs.length){
+//                     res.send("Done")
+//                 }
+//             })
+//         })
+//     })
+//     .catch(err=>console.log(err))
+// })
+// router.get('/resi', ensureAuthenticated, (req,res) => {
+//     numberOfQuestions = 15;
+//     Quiz.findOne({_id:"5e04f35f1c9d440000ea1403"})
+//     .then(quiz=>{
+//     var pos = [];
+//     quiz.results.forEach((r,i)=>{
+//         if (i==0){
+//             pos.push(r);
+//         }else{
+//             for(var j = 0;j < pos.length;j++){
+//                 if (parseInt(r[1])>parseInt(pos[j][1])){
+//                     pos.splice(j,0,r);
+//                     break;
+//                 }else if(j==pos.length-1){
+//                     pos.push(r);
+//                     break;
+//                 }
+//             }
+//         }
+//     })
+//     const players_id = [];
+//     const players_points = [];
+//     pos.forEach(p=>{
+//         players_id.push(p[0])
+//         players_points.push(p[1])
+//     })
+
+//     const newResult = new Result({
+//         quiz_id: quiz.id,
+//         round: quiz.round,
+//         total_points: numberOfQuestions,
+//         players_id,
+//         players_points
+//     });
+//     newResult.save()
+//     .then(result => {
+//         quiz.played_users = [];
+//         quiz.current_participants =0;
+//         quiz.round += 1;
+//         quiz.results = [];
+//         quiz.save()
+//         .then(q=>{
+//             // Pay Winner
+//             const trans = [];
+//             User.findOne({_id:pos[0][0]})
+//             .then(u=>{
+//                 User.updateOne({_id:u.id},{$set:{
+//                     revenue: u.revenue+0.8*quiz.maximum_participants*quiz.registration_fee
+//                 }})
+//                 .then(user=>{
+//                     trans.push(new Transaction({
+//                         type: "Congrats!! Quiz Winner",
+//                         amount: 0.8*quiz.maximum_participants*quiz.registration_fee,
+//                         fee: 0,
+//                         currency: "XAF",
+//                         provider: "CE-Acad",
+//                         old_revenue: u.revenue,
+//                         new_revenue: u.revenue + 0.8*quiz.maximum_participants*quiz.registration_fee,
+//                         id_user: u.id,
+//                         from_to: process.env.ADMIN_ID,
+//                         status: "COMPLETED"
+//                     }))
+//                     if (trans.length == 2){
+//                         Transaction.insertMany(trans)
+//                         .then(docs=>{
+//                             res.send([{status:"200"}])
+//                         })
+//                         .catch(err=>console.log(err))
+//                     }
+//                 })
+//                 .catch(err=>console.log(err))
+//             })
+//             .catch(err=>console.log(err))
+//             // Pay Winner from CE-Acad
+//             User.findOne({email:"admin@ce-acad.com"})
+//             .then(u=>{
+//                 User.updateOne({_id:u.id},{$set:{
+//                     revenue_to_redistribute: u.revenue_to_redistribute-0.8*quiz.maximum_participants*quiz.registration_fee
+//                 }})
+//                 .then(user=>{
+//                     trans.push(new Transaction({
+//                         type: "Payed Winner",
+//                         amount: -0.8*quiz.maximum_participants*quiz.registration_fee,
+//                         fee: 0,
+//                         currency: "XAF",
+//                         provider: "CE-Acad",
+//                         old_revenue: u.revenue_to_redistribute,
+//                         new_revenue: u.revenue_to_redistribute - 0.8*quiz.maximum_participants*quiz.registration_fee,
+//                         id_user: u.id,
+//                         from_to: pos[0][0],
+//                         status: "COMPLETED"
+//                     }))
+//                     if (trans.length == 2){
+//                         Transaction.insertMany(trans)
+//                         .then(docs=>{
+//                             res.send([{status:"200"}])
+//                         })
+//                         .catch(err=>console.log(err))
+//                     }
+//                 })
+//                 .catch(err=>console.log(err))
+//             })
+//             .catch(err=>console.log(err))
+//         })
+//         .catch(err=>console.log(err))
+//     })
+//     .catch(err=>console.log(err))
+// })
+// })
+// router.get('/correctTrans', ensureAuthenticated, (req,res) => {
+//     var newV = 0;
+//     var newVRed = 0;
+//     const user = req.user;
+//     var docs;
+//     var count = 0;
+//     var str = `<th>
+//     <td>Old Revenue</td>
+//     <td>Amount</td>
+//     <td>New Revenue</td>
+//     </th>`;
+//     Transaction.find({id_user:req.user.id})
+//     .then(d=>{
+//         docs = d;
+//         docs.forEach(doc=>{
+//             if(doc.type=="Player Registered" || doc.type == "Payed Winner"){
+//                 doc.old_revenue = newVRed;
+//                 newVRed += doc.amount;
+//                 doc.new_revenue = newVRed;
+//             }else{
+//                 doc.old_revenue = newV;
+//                 newV += doc.amount;
+//                 doc.new_revenue = newV;
+//                 str += `<th>
+//                     <td>${doc.old_revenue}</td>
+//                     <td>${doc.amount}</td>
+//                     <td>${doc.new_revenue}</td>
+//                 </th>`;
+//             }
+//         })
+//         user.revenue = newV;
+//         user.save()
+//         .then(u=>{
+//             docs.forEach(doc=>{
+//                 doc.save()
+//                 .then(u =>{
+//                     count++
+//                     if(count==docs.length){
+//                         res.send(str)
+//                     }
+//                 })
+//             })
+//         })
+//     })
+// })
+
+
+
+OLD QUIZ results
+<hr>
+        <div class="grid-container">
+            <div class="grid-item-left">
+                <h1>Old Quiz Results</h1>
+                <p>Here are the last reults of the quizzes which are no longer available</p>
+            </div>
+            <div class="grid-item-right">
+                <p><span class="labels">500frs English Quiz for 15 participants: </span></p>
+                <button class="btn view-results" data-id="5e04f1ff1c9d440000ea1402" >View Results</button>
+                <div id="5e04f1ff1c9d440000ea1402"></div>
+                <p><span class="labels">500frs English Quiz for 5 participants: </span></p>
+                <button class="btn view-results" data-id="5e0072f11c9d4400000b258c" >View Results</button>
+                <div id="5e0072f11c9d4400000b258c"></div>
+                <p><span class="labels">1000frs English Quiz for 15 participants: </span></p>
+                <button class="btn view-results" data-id="5e04f3c01c9d440000ea1404" >View Results</button>
+                <div id="5e04f3c01c9d440000ea1404"></div>
+                <p><span class="labels">1000frs English Quiz for 5 participants: </span></p>
+                <button class="btn view-results" data-id="5e04f35f1c9d440000ea1403" >View Results</button>
+                <div id="5e04f35f1c9d440000ea1403"></div>
+            </div>
+        </div>
+
+
+// GET Results
+// Dashboard Quiz - Get Results
+router.get('/quiz/get-results', ensureAuthenticated, (req,res) => {
+    const {quizID} = req.query;
+    const user = req.user;
+    if (user.email != "admin@ce-acad.com"){
+        Result.find({$and:[{quiz_id:quizID},{players_id:{$in:[user.id]}}]})
+        .then(docs=>{
+            const results = [];
+            var done = 0;
+            docs.forEach(doc=>{
+                doc.players_id.forEach((pid,ind)=>{
+                    User.findOne({_id:pid})
+                    .then(u=>{
+                        if (user.id == u.id){
+                            doc.players_id[ind] = "You";
+                        }else{
+                            doc.players_id[ind] = u.username;
+                        }
+                        done++
+                        if (done == docs.length*doc.players_id.length){
+                            res.send(docs);
+                        }
+                    })
+                    .catch(err=>console.log(err))
+                })
+            })
+        })
+        .catch(err=>console.log(err))
+    }else{
+        Result.find({quiz_id:quizID})
+        .then(docs=>{
+            const results = [];
+            var done = 0;
+            docs.forEach(doc=>{
+                doc.players_id.forEach((pid,ind)=>{
+                    User.findOne({_id:pid})
+                    .then(u=>{
+                        if (user.id == u.id){
+                            doc.players_id[ind] = "You";
+                        }else{
+                            doc.players_id[ind] = u.username;
+                        }
+                        done++
+                        if (done == docs.length*doc.players_id.length){
+                            res.send(docs);
+                        }
+                    })
+                    .catch(err=>console.log(err))
+                })
+            })
+        })
+        .catch(err=>console.log(err))
+    }
+})
+
+
+// SESSION EXPIRED
+// Dashboard Quiz Play - Session Expired Results
+router.post('/quiz/session-expired-results', (req,res) => {
+    if (typeof req.body.role !== "undefined"){
+        const {totalPoints, quizID,numberOfQuestions} = req.body;
+        Quiz.findOne({_id:quizID})
+        .then(quiz=>{
+            var pos = [];
+            quiz.results.forEach((r,i)=>{
+                if (i==0){
+                    pos.push(r);
+                }else{
+                    for(var j = 0;j < pos.length;j++){
+                        if (parseInt(r[1])>parseInt(pos[j][1])){
+                            pos.splice(j,0,r);
+                            break;
+                        }else if(j==pos.length-1){
+                            pos.push(r);
+                            break;
+                        }
+                    }
+                }
+            })
+            const players_id = [];
+            const players_points = [];
+            var winners_id = [pos[0][0]];
+            pos.forEach((p,ind)=>{
+                players_id.push(p[0])
+                if (ind==0){
+                    players_points.push(p[1]+ `- 1st - ${Math.floor(0.8*0.5*quiz.current_participants*quiz.registration_fee)} FCFA`)
+                }
+                else if (winners_id.length == 3 || winners_id.includes(p[0])){
+                    players_points.push(p[1])
+                }else{
+                    winners_id.push(p[0])
+                    if(winners_id.length == 2){
+                        players_points.push(p[1]+  `- 2nd - ${Math.floor(0.8*0.3*quiz.current_participants*quiz.registration_fee)} FCFA`)
+                    }else{
+                        players_points.push(p[1]+ `- 3rd - ${Math.floor(0.8*0.2*quiz.current_participants*quiz.registration_fee)} FCFA`)
+                    }
+                }
+            })
+
+            // for(var i = players_id.length; i < quiz.maximum_participants; i++){
+            //     players_id.push("5e07956e1c9d4400000845ca")
+            //     players_points.push("0")
+            // }
+
+            const newResult = new Result({
+                quiz_id: quiz.id,
+                round: quiz.round,
+                total_points: numberOfQuestions,
+                players_id,
+                players_points
+            });
+            newResult.save()
+            .then(result => {
+                const cP = quiz.current_participants;
+                quiz.played_users = [];
+                quiz.current_participants =0;
+                quiz.round += 1;
+                quiz.results = [];
+                quiz.save()
+                .then(q=>{
+                    // Pay Winner
+                    const trans = [];
+                    // 1st Position
+                    User.findOne({_id:winners_id[0]})
+                    .then(u=>{
+                        User.updateOne({_id:u.id},{$set:{
+                            revenue: Math.floor(u.revenue+0.8*0.5*cP*quiz.registration_fee)
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Congrats!! 1st Position Quiz Winner",
+                                amount: Math.floor(0.8*0.5*cP*quiz.registration_fee),
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue,
+                                new_revenue: u.revenue + Math.floor(0.8*0.5*cP*quiz.registration_fee),
+                                id_user: u.id,
+                                from_to: process.env.ADMIN_ID,
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 6){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
+                                    res.send([{status:"200"}])
+                                })
+                                .catch(err=>console.log(err))
+                            }
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                    // 2nd Position
+                    User.findOne({_id:winners_id[1]})
+                    .then(u=>{
+                        User.updateOne({_id:u.id},{$set:{
+                            revenue: u.revenue+Math.floor(0.8*0.3*cP*quiz.registration_fee)
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Congrats!! 2nd Position Quiz Winner",
+                                amount: Math.floor(0.8*0.3*cP*quiz.registration_fee),
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue,
+                                new_revenue: u.revenue + Math.floor(0.8*0.3*cP*quiz.registration_fee),
+                                id_user: u.id,
+                                from_to: process.env.ADMIN_ID,
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 6){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
+                                    res.send([{status:"200"}])
+                                })
+                                .catch(err=>console.log(err))
+                            }
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                    // 3rd Position
+                    User.findOne({_id:winners_id[2]})
+                    .then(u=>{
+                        User.updateOne({_id:u.id},{$set:{
+                            revenue: u.revenue+Math.floor(0.8*0.2*cP*quiz.registration_fee)
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Congrats!! 3rd Position Quiz Winner",
+                                amount: Math.floor(0.8*0.2*cP*quiz.registration_fee),
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue,
+                                new_revenue: u.revenue + Math.floor(0.8*0.2*cP*quiz.registration_fee),
+                                id_user: u.id,
+                                from_to: process.env.ADMIN_ID,
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 6){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
+                                    res.send([{status:"200"}])
+                                })
+                                .catch(err=>console.log(err))
+                            }
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                    // Pay Winner from CE-Acad
+                    User.findOne({email:"admin@ce-acad.com"})
+                    .then(u=>{
+                        User.updateOne({_id:u.id},{$set:{
+                            revenue_to_redistribute: u.revenue_to_redistribute-Math.floor(0.8*cP*quiz.registration_fee)
+                        }})
+                        .then(user=>{
+                            trans.push(new Transaction({
+                                type: "Payed Winner",
+                                amount: -Math.floor(0.8*0.5*cP*quiz.registration_fee),
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: u.revenue_to_redistribute,
+                                new_revenue: u.revenue_to_redistribute - Math.floor(0.8*0.5*cP*quiz.registration_fee),
+                                id_user: u.id,
+                                from_to: winners_id[0],
+                                status: "COMPLETED"
+                            }))
+                            var oR = u.revenue_to_redistribute - Math.floor(0.8*0.5*cP*quiz.registration_fee);
+                            trans.push(new Transaction({
+                                type: "Payed Winner",
+                                amount: -Math.floor(0.8*0.3*cP*quiz.registration_fee),
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: oR,
+                                new_revenue: oR - Math.floor(0.8*0.3*cP*quiz.registration_fee),
+                                id_user: u.id,
+                                from_to: winners_id[1],
+                                status: "COMPLETED"
+                            }))
+                            oR = oR - Math.floor(0.8*0.3*cP*quiz.registration_fee);
+                            trans.push(new Transaction({
+                                type: "Payed Winner",
+                                amount: -Math.floor(0.8*0.2*cP*quiz.registration_fee),
+                                fee: 0,
+                                currency: "XAF",
+                                provider: "CE-Acad",
+                                old_revenue: oR,
+                                new_revenue: oR - Math.floor(0.8*0.2*cP*quiz.registration_fee),
+                                id_user: u.id,
+                                from_to: winners_id[2],
+                                status: "COMPLETED"
+                            }))
+                            if (trans.length == 6){
+                                Transaction.insertMany(trans)
+                                .then(docs=>{
+                                    res.send([{status:"200"}])
+                                })
+                                .catch(err=>console.log(err))
+                            }
+                        })
+                        .catch(err=>console.log(err))
+                    })
+                    .catch(err=>console.log(err))
+                })
+                .catch(err=>console.log(err))
+            })
+            .catch(err=>console.log(err))
+        })
+        .catch(err=>console.log(err))
+    }else{
+        res.send("Unauthorized Access")
+    }
+})
